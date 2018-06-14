@@ -106,8 +106,8 @@
 		$result .= "<div id='word-cloud-container'>";
 			$result .= "<canvas style='width: 100%;' class='wordCloud' id='".$this->options['target-id']."' width='400px' height='400px'></canvas>";
 			$result .= "<script type='text/javascript'>";
-				$result .= "var wc_wordList = ".json_encode($this->wordList).";";
-				$result .= "var wc_wordCloudOptions = ".json_encode($this->options).";";
+				$result .= "var wc_wordList_".$this->options['target-id']." = ".json_encode($this->wordList).";";
+				$result .= "var wc_options_".$this->options['target-id']." = ".json_encode($this->options).";";
 			$result .= "</script>";
 		$result .= "</div>";
 		
