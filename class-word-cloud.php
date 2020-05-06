@@ -56,7 +56,11 @@
 		
 		switch ($this->options['source']) {
 
-			// edit field
+			
+			/**
+			 * Edit field in frontend 
+			 * @since    1.1.0
+			 */
 			// we dont need to extract the word list from somewhere
 			// calculation will be done at frontend
 			case 'edit-field':

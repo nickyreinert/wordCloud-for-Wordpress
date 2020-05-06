@@ -9,7 +9,7 @@
  * Plugin Name:       word-cloud
  * Plugin URI:        https://www.nickyreinert.de/word-cloud
  * Description:       Draw a word cloud from custom words
- * Version:           1.0.0
+ * Version:           1.1.0
  * Author:            Nicky Reinert
  * Author URI:        https://www.nickyreinert.de
  * License:           GPL-2.0+
