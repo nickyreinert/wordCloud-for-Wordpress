@@ -83,7 +83,11 @@
 
 		$.each(wordCount, function(word, count){
 
-			preparedWordList.push([word, count]);
+			if (count >= settings['min-word-occurence']) {
+
+				preparedWordList.push([word, count]);
+
+			}
 
 		});
 
