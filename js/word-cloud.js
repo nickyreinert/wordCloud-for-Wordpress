@@ -1,6 +1,9 @@
 (function ($) {
 	'use strict';
 
+	// global var holds word counts for every registered word cloud
+	var wordCounts = {};
+
 	// go through all canvas elements to receive word cloud settings and
 	// render word cloud
 	$(".wordCloud").each(function (index, element) {
@@ -74,24 +77,9 @@
 
 		});
 
-		// prepare word list for rendering:
-		// 0: Object { xValue: "Foobar", yValue: "5" }
-		// 1: Object { xValue: "Welt", yValue: "2" }
-		// 2: Object { xValue: "Test", yValue: "10" }
+		wordCounts[settings.id] = wordCount;
 
-		var preparedWordList = [];
-
-		$.each(wordCount, function(word, count){
-
-			if (count >= settings['min-word-occurence']) {
-
-				preparedWordList.push([word, count]);
-
-			}
-
-		});
-
-		return preparedWordList;
+		return prepareWordList(wordCount, settings);;
 
 	}
 
@@ -129,8 +117,22 @@
 		};
 
 		currentWcSettings.weightFactor = function (size) {
+		
 			return Math.pow(size, 3) * $('#myWordCloud2').width() / 512;
-		  };
+		
+		};
+
+		// if user clicks a word, it will be removed from the list and added to 
+		// an ignore list
+		currentWcSettings.click = function (item, dimension, event) {
+
+			delete wordCounts[currentWcSettings.id][item[0]];
+			
+			currentWcSettings.list = prepareWordList(wordCounts[currentWcSettings.id], currentWcSettings);
+
+			renderWordCloud(currentWcSettings);
+
+		};
 
 		currentWcSettings.hover = window.drawBox;
 
@@ -138,20 +140,27 @@
 
 	}
 
-	function prepareWordList(rawWordList) {
 
-		var wordList = [];
+	// prepare word list for rendering:
+	// 0: Object { xValue: "Foobar", yValue: "5" }
+	// 1: Object { xValue: "Welt", yValue: "2" }
+	// 2: Object { xValue: "Test", yValue: "10" }
 
-		for (var i = 0; i < rawWordList.length; i++) {
-			if (i == 0) {
-				var max = parseInt(rawWordList[i].yValue);
+	function prepareWordList(wordCount, settings) {
+
+		var preparedWordList = [];
+
+		$.each(wordCount, function(word, count){
+
+			if (count >= settings['min-word-occurence']) {
+
+				preparedWordList.push([word, count]);
+
 			}
 
-			wordList[i] = [rawWordList[i].xValue, parseInt((rawWordList[i].yValue / max) * 100)];
+		});
 
-		}
-
-		return wordList;
+		return preparedWordList;
 
 	}
 
