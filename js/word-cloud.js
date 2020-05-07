@@ -34,6 +34,7 @@
 			}
 
 			$(element).parent().prepend("<button class='render-word-cloud'>Render</button>");
+			$(element).parent().append("<p id='word-black-list-"+currentWcSettings.id+"'></p>");
 
 		}
 
@@ -126,10 +127,16 @@
 		// an ignore list
 		currentWcSettings.click = function (item, dimension, event) {
 
+			// remove word from raw list
 			delete wordCounts[currentWcSettings.id][item[0]];
 			
+			// prepare raw list to make it ready for word cloud renderer
 			currentWcSettings.list = prepareWordList(wordCounts[currentWcSettings.id], currentWcSettings);
 
+			// add word to black list below the word cloud
+			$('#word-black-list-'+currentWcSettings.id).append('<span class="black-list">' + item[0] + '</span>');
+
+			// render word cloud again
 			renderWordCloud(currentWcSettings);
 
 		};
@@ -140,6 +147,16 @@
 
 	}
 
+	function removeWordFromBlackList() {
+
+		// if user clicks on word below word cloud canvas
+		// it will be removed from black list
+		$('.black-list').click(function() {
+
+			
+		});
+
+	}
 
 	// prepare word list for rendering:
 	// 0: Object { xValue: "Foobar", yValue: "5" }

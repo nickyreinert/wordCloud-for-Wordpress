@@ -37,7 +37,7 @@
 			'shape' 			=> 'circle',
 			'demo-data'			=> 0,
 			'min-word-length'	=> 3, // minimal length of word in chars
-			'min-word-occurence'=> 1, // minimal occurence of word 
+			'min-word-occurence'=> 1, // minimal occurence of word otherwise it will be ignored
 			'punctuation-chars' => ',.;', // will be removed before counting words
 			'target-id'			=> NULL // unique id of the word cloud container
 		), $options );

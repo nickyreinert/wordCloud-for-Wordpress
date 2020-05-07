@@ -1,0 +1,7 @@
+.black-list {
+    padding-right: 5px;
+}
+
+.black-list:last-of-type {
+    padding-right: 0;
+}
