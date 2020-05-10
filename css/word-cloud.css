@@ -27,3 +27,16 @@
     padding-left: 2px;
     
 }
+
+.word-details {
+    position: absolute;
+    z-index: 999;
+    display: none;
+    background-color: #ffffff;
+    font-family: sans-serif;
+
+}
+
+.word-details::before {
+    content: 'occurrences: ';
+}

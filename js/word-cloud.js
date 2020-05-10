@@ -40,6 +40,9 @@
 		// add black list
 		$(element).parent().append("<p id='black-list-"+currentWcSettings.id+"'></p>");
 
+		// add hover element, hidden on init
+		$(element).parent().append("<div class='word-details'>foobar</div>");
+
 	});
 
 
@@ -132,7 +135,7 @@
 		
 		};
 
-		// if user clicks a word, it will be removed from the list and added to 
+			// if user clicks a word, it will be removed from the list and added to 
 		// an ignore list
 		currentWcSettings.click = function (item, dimension, event) {
 
@@ -142,7 +145,15 @@
 
 		currentWcSettings.hover = function (item, dimension, event) {
 
-			console.log(item);
+			$('.word-details').css({top: event.pageY + 10, left: event.pageX + 10});
+
+			$('.word-details').toggle();
+
+			if (item != undefined) {
+
+				$('.word-details').text(item[1]);
+
+			}
 
 		};
 
