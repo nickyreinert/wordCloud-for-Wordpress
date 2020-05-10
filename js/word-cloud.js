@@ -57,34 +57,59 @@
 
 		var currentWcSettings = prepareWcSettings($(this).parent().find('canvas'));
 
+		var blackList = getBlackList(currentWcSettings.id);
+
 		currentWcSettings.list = countWords(			
 			$(this).parent().find('textarea').val(), 
-			currentWcSettings);
+			currentWcSettings,
+			blackList);
 
 		renderWordCloud(currentWcSettings);
 
 	});
 
-	function countWords(text, settings) {
+	function getBlackList(id) {
+
+		var blackList = {};
+
+		$('#black-list-' + id).children().each(function(){
+
+			var count = $(this).attr('count');
+			var word = $(this).find('.black-list-word').html();
+
+			blackList[word] = count;
+
+		})
+		
+		return blackList;
+
+	}
+
+	function countWords(text, settings, blackList) {
 
 		var textArray = text.split(' ');
 		var wordCount = {};
+
 
 		// first count the words
 		$.each(textArray, function(index, word){
 
 			var cleanWord = word.replace(new RegExp('['+settings['punctuation-chars']+']'), '');
+			
+			if (typeof(blackList[cleanWord]) === 'undefined') {
 
-			if (cleanWord.length >= settings['min-word-length']) {
+				if (cleanWord.length >= settings['min-word-length']) {
 
-				if (cleanWord in wordCount) {
-					
-					wordCount[cleanWord] = wordCount[cleanWord] + 1;
+					if (cleanWord in wordCount) {
+						
+						wordCount[cleanWord] = wordCount[cleanWord] + 1;
 
-				} else {
+					} else {
 
-					wordCount[cleanWord] = 1;
- 
+						wordCount[cleanWord] = 1;
+	
+					}
+
 				}
 
 			}
@@ -104,8 +129,6 @@
 	 * 
 	 */
 	function renderWordCloud(wcSettings) {
-
-		console.log(wcSettings);
 
 		wcSettings.weightFactorFactor = (550 / wcSettings.list.length).toFixed(2);
 
