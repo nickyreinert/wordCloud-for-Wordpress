@@ -8,9 +8,9 @@
 	// render word cloud
 	$(".wordCloud").each(function (index, element) {
 
-		var currentWcSettings = getWordCloudSettings(element);
+		var currentWcSettings = prepareWcSettings(element);
 
-		// if text comes from edit field, don't render word cloud yet
+		// if text comes from backend render word cloud
 		if (currentWcSettings.source != 'edit-field') {
 
 			// get word list
@@ -34,15 +34,25 @@
 			}
 
 			$(element).parent().prepend("<button class='render-word-cloud'>Render</button>");
-			$(element).parent().append("<p id='word-black-list-"+currentWcSettings.id+"'></p>");
 
 		}
 
+		// add black list
+		$(element).parent().append("<p id='black-list-"+currentWcSettings.id+"'></p>");
+
 	});
 
-	$(".render-word-cloud").click(function (e) {
 
-		var currentWcSettings = getWordCloudSettings($(this).parent().find('canvas'));
+	// add trigger so user can remove words from black list
+	$(document).on("click", "span.black-list-item" , function() {
+
+		removeWordFromBlackList($(this));
+
+	});
+
+	$('.render-word-cloud').click(function () {
+
+		var currentWcSettings = prepareWcSettings($(this).parent().find('canvas'));
 
 		currentWcSettings.list = countWords(			
 			$(this).parent().find('textarea').val(), 
@@ -92,16 +102,15 @@
 	 */
 	function renderWordCloud(wcSettings) {
 
+		console.log(wcSettings);
+
 		wcSettings.weightFactorFactor = (550 / wcSettings.list.length).toFixed(2);
 
 		WordCloud($('#' + wcSettings['target-id'])[0], wcSettings);
 
 	}
 
-	function getWordCloudSettings(element) {
-
-		// TODO: Remove
-		// var context = element.getContext('2d');
+	function prepareWcSettings(element) {
 
 		var currentWcId = $(element).attr('id');
 
@@ -127,34 +136,54 @@
 		// an ignore list
 		currentWcSettings.click = function (item, dimension, event) {
 
-			// remove word from raw list
-			delete wordCounts[currentWcSettings.id][item[0]];
-			
-			// prepare raw list to make it ready for word cloud renderer
-			currentWcSettings.list = prepareWordList(wordCounts[currentWcSettings.id], currentWcSettings);
-
-			// add word to black list below the word cloud
-			$('#word-black-list-'+currentWcSettings.id).append('<span class="black-list">' + item[0] + '</span>');
-
-			// render word cloud again
-			renderWordCloud(currentWcSettings);
+			addWordToBlackList(item, currentWcSettings);
 
 		};
 
-		currentWcSettings.hover = window.drawBox;
+		currentWcSettings.hover = function (item, dimension, event) {
+
+			console.log(item);
+
+		};
 
 		return currentWcSettings;
 
 	}
 
-	function removeWordFromBlackList() {
+	function addWordToBlackList(item, currentWcSettings) {
+
+		// save current word count to add it to black list
+		var wordCount = wordCounts[currentWcSettings.id][item[0]];
+
+		// remove word from raw list
+		delete wordCounts[currentWcSettings.id][item[0]];
+		
+		// prepare raw list to make it ready for word cloud renderer
+		currentWcSettings.list = prepareWordList(wordCounts[currentWcSettings.id], currentWcSettings);
+
+		// add word to black list below the word cloud
+		$('#black-list-'+currentWcSettings.id).append('<span count='+wordCount+' class="black-list-item"><span class="black-list-word">' + item[0] + '</span><span class="black-list-word-removal">&#x2A2F;</span></span>');
+
+		// render word cloud again
+		renderWordCloud(currentWcSettings);
+
+	}
+
+	function removeWordFromBlackList(item) {
 
 		// if user clicks on word below word cloud canvas
 		// it will be removed from black list
-		$('.black-list').click(function() {
 
-			
-		});
+		var currentWcSettings = prepareWcSettings($(item).parent().parent().find('canvas'));
+
+		// remove word from raw list
+		wordCounts[currentWcSettings.id][$(item).find('.black-list-word').text()] = parseInt($(item).attr('count'));
+
+		currentWcSettings.list = prepareWordList(wordCounts[currentWcSettings.id], currentWcSettings);
+
+		$(item).remove();
+
+		renderWordCloud(currentWcSettings);
 
 	}
 
