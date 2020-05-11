@@ -45,6 +45,7 @@
 .wordCloud-container textarea {
     width: 80%;
     margin: 0 auto;
+    display: block;
 }
 
 .wordCloud-container button.render-word-cloud {
