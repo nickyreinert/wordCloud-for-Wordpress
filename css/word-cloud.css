@@ -38,5 +38,19 @@
 }
 
 .word-details::before {
-    content: 'occurrences: ';
+    content: 'Anzahl: ';
+}
+
+
+.wordCloud-container textarea {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.wordCloud-container button.render-word-cloud {
+    width: 40%;
+    display: block;
+    margin: 0.5em auto;
+    border-radius: 10px;
+    background-color: #00a3d3;
 }

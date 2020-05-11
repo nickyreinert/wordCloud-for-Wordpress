@@ -5,7 +5,13 @@
 {
 	private $pluginName = 'word-cloud';
 	private $version = '1.1.0';
-	private $demoData = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.';
+	private $demoData = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.   
+
+	Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.   
+	
+	Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.   
+	
+	Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer';
 
 	private $error = NULL;
 
@@ -26,19 +32,28 @@
 		$this->options = shortcode_atts( array(
 			'source'			=> 'custom-field', // TODO: file from media library
 			'query' 			=> NULL,
-			'source-id' 			=> 'word-cloud', // name of the custom field that hold's word count list
+			'source-id' 		=> 'word-cloud', // name of the custom field that hold's word count list
 			'backgroundColor' 	=> '#ffffff',
 			'gridSize'			=> 1,
 			'fontFamily'		=> 'Arial,sans-serif',
+			'minSize'			=> 1,
 			'fontWeight'		=> 'bold',
 			'minRotation' 		=> 0,
 			'maxRotation' 		=> 0,
-			'weightFactor' 		=> 1,
+			'sizeFactor' 		=> 40,
 			'shape' 			=> 'circle',
+			'drawOutOfBound' 	=> 0,
+			'shuffle' 			=> 1,
+			'canvas-width' 		=> '1024px',
+			'canvas-height' 	=> '800px',
+			'ellipticity' 		=> 1,
 			'demo-data'			=> 0,
-			'min-word-length'	=> 3, // minimal length of word in chars
-			'min-word-occurence'=> 1, // minimal occurence of word otherwise it will be ignored
-			'punctuation-chars' => ',.;', // will be removed before counting words
+			'clearCanvas'		=> true,
+			'backgroundColor'	=> 'rgba(255,255,255,0)',
+			'min-word-length'	=> 2, // minimal length of word in chars
+			'min-word-occurence'=> 2, // minimal occurence of word otherwise it will be ignored
+			'ignore-chars' 		=> '()[],.;', // will be removed before counting words
+			'min-alpha' 		=> 0.1, // minimum alpha value to gradient words that have a lower weight, set to 1 to disable gradient
 			'target-id'			=> NULL // unique id of the word cloud container
 		), $options );
 		
@@ -116,7 +131,7 @@
 
 		$result = NULL;
 		$result .= "<div id='".$this->options['target-id']."-container' class='wordCloud-container'>".PHP_EOL;
-		$result .= "<canvas style='width: 100%;' class='wordCloud' id='".$this->options['target-id']."' width='400px' height='400px'></canvas>".PHP_EOL;
+		$result .= "<canvas style='width: 100%;' class='wordCloud' id='".$this->options['target-id']."' width='".$this->options['canvas-width']."' height='".$this->options['canvas-height']."'></canvas>".PHP_EOL;
 		$result .= "<script type='text/javascript'>".PHP_EOL;
 		$result .= "var wc_wordList_".$this->options['target-id']." = ".json_encode($this->wordList).";".PHP_EOL;
 		$result .= "var wc_options_".$this->options['target-id']." = ".json_encode($this->options).";".PHP_EOL;
