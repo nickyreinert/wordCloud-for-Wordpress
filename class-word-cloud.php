@@ -48,7 +48,7 @@
 			'backgroundColor'	=> 'rgba(255,255,255,0)',
 			'min-word-length'	=> 2, // minimal length of word in chars
 			'min-word-occurence'=> 2, // minimal occurence of word otherwise it will be ignored
-			'ignore-chars' 		=> '()[],.;', // will be removed before counting words
+			'ignore-chars' 		=> '\(\)\[\]\,\.;', // will be removed before counting words
 			'min-alpha' 		=> 0.1, // minimum alpha value to gradient words that have a lower weight, set to 1 to disable gradient
 			'target-id'			=> NULL // unique id of the word cloud container
 		), $options );
