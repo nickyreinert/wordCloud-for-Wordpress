@@ -193,7 +193,7 @@
 
 		settings.weightFactor = function (size) {
 		
-			return size * $('#myWordCloud2').width() / settings.sizeFactor;
+			return size * $('#'+settings['target-id']).width() / settings.sizeFactor;
 			// return Math.pow(size, 2.5) * $('#myWordCloud2').width() / 256;
 		
 		};
