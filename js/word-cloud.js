@@ -294,7 +294,7 @@
 		
 		// in order to start with the most important word in the center, sort the array
 		// thanks to https://stackoverflow.com/a/5200010
-		wordCount.sort(function(a, b) {
+		preparedWordList.sort(function(a, b) {
     			a = a[1];
     			b = b[1];
 
