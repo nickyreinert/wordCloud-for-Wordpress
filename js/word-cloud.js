@@ -75,6 +75,12 @@
 
 		var currentWcSettings = getWcSettings($(this).parent().find('canvas'));
 
+		if (currentWcSettings['persistentBlackList'] == 0) {
+			
+			$('#black-list-' + currentWcSettings.id).children().remove();
+
+		} 
+
 		var blackList = getBlackList(currentWcSettings.id);
 
 		currentWcSettings.list = countWords(			
@@ -114,6 +120,17 @@
 
 			var cleanWord = word.replace(new RegExp('['+settings['ignore-chars']+']'), '');
 			
+			if (settings['textTransform'] == 'uppercase') {
+
+				cleanWord = cleanWord.toUpperCase();
+
+			} else if (settings['textTransform'] == 'lowercase') {
+
+
+				cleanWord = cleanWord.toLowerCase();
+
+			}
+
 			if (typeof(blackList[cleanWord]) === 'undefined') {
 
 				if (cleanWord.length >= settings['min-word-length']) {

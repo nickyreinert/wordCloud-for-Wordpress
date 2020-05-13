@@ -44,6 +44,8 @@
 			'canvas-height' 	=> '800px',
 			'ellipticity' 		=> 1,
 			'demo-data'			=> 0,
+			'textTransform'		=> 'lowercase', // or lowercase or leave empty (null)
+			'persistentBlackList' => 0, // keep blacklist when re-rendering 
 			'clearCanvas'		=> true,
 			'backgroundColor'	=> 'rgba(255,255,255,0)',
 			'min-word-length'	=> 2, // minimal length of word in chars

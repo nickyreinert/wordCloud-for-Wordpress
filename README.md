@@ -1,12 +1,10 @@
 # wordCloud-for-Wordpress
-Simple plugin to display cloud of words in Wordpress
+A plugin for wordpress to display cloud words in pages and posts.
 
 
-This is a plugin for Wordpress to display a list of words. Based on it's given occurences they will be displayed with different font sizes. This plugin is based on the great wordList2-repository by timdream: https://github.com/timdream/wordcloud2.js
+This plugin allowsy you to use shortcodes in pages and posts to create word clouds based on a list of counted words or a given text. The words will be rendered into a canvas. Based on their occurrences the size and color changes. This plugin is based on the great wordList2-library by timdream: https://github.com/timdream/wordcloud2.js
 
 The wordlist you provide to this plugin contains a simple list with two columns: The first column is the word, the second column contains the occurence of this word.
-
-This plugin will *not* count words!
 
 # Usage and installation
 
@@ -18,7 +16,7 @@ Those are the optional parameters:
 			'query' 			  => the query, if your source is sql
 			'source-id' 		=> the name of the custom page / post field, where you put the word list
 			'backgroundColor' => background color in hex value, e.g. #ffffff
-			'gridSize'			=> size of the grid
+			'gridSize'			=> space between words
 			'fontFamily'		=> used font family, e.g. Arial,sans-serif
 			'fontWeight'		=> used font weight, e.g. bold
 			'minRotation' 		=> level of minimum rotation, set to 0 if no rotation is required
