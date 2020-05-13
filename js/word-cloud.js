@@ -134,6 +134,15 @@
 
 		});
 
+		// in order to start with the most important word in the center, sort the array
+		// thanks to https://stackoverflow.com/a/5200010
+		wordCount.sort(function(a, b) {
+    			a = a[1];
+    			b = b[1];
+
+    			return a > b ? -1 : (a < b ? 1 : 0);
+		});
+		
 		wordCounts[settings.id] = wordCount;
 
 		return prepareWordList(wordCount, settings);
