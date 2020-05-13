@@ -38,7 +38,7 @@
 			'maxRotation' 		=> 0,
 			'sizeFactor' 		=> 40,
 			'shape' 			=> 'circle',
-			'drawOutOfBound' 	=> 0,
+			'drawOutOfBound' 	=> true,
 			'shuffle' 			=> 1,
 			'canvas-width' 		=> '1024px',
 			'canvas-height' 	=> '800px',
