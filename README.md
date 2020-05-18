@@ -1,4 +1,4 @@
-# wordCloud-for-Wordpress
+# wordCloud-for-Wordpress 2
 A plugin for wordpress to display cloud words in pages and posts.
 
 
