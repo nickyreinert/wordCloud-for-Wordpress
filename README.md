@@ -1,6 +1,5 @@
 # wordCloud-for-Wordpress 2
-A plugin for wordpress to display cloud words in pages and posts.
-
+A plugin for Wordpress to display cloud words in pages and posts.
 
 This plugin allowsy you to use shortcodes in pages and posts to create word clouds based on a list of counted words or a given text. The words will be rendered into a canvas. Based on their occurrences the size and color changes. This plugin is based on the great wordList2-library by timdream: https://github.com/timdream/wordcloud2.js
 
