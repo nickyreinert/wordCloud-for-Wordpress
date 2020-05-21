@@ -1,33 +1,34 @@
 (function ($) {
 	'use strict';
 
-	// global var holds word counts for every registered word cloud
-	var wordCounts = {};
+	// object contains word cloud data
 
 	// go through all canvas elements to receive word cloud settings and
 	// render word cloud
-	$(".wordCloud").each(function (index, element) {
+	$(".word-cloud").each(function (index, element) {
 
-		var currentWcSettings = getWcSettings(element);
+		// var wordCloudSettings = getWcSettings(element);
+		var wordCloudSettings = window[$(element).attr('settings')];
 
+		console.log(wordCloudSettings);
 		// add black list
-		$(element).parent().append("<p id='black-list-"+currentWcSettings.id+"'></p>");
+		$(element).parent().append("<p id='black-list-"+wordCloudSettings.id+"'></p>");
 
 		// add hover element, hidden on init
-		$(element).parent().append("<div class='word-details' id='word-details-"+currentWcSettings.id+"'>foobar</div>");
+		$(element).parent().append("<div class='word-details' id='word-details-"+wordCloudSettings.id+"'>foobar</div>");
 		
 		// if text comes from backend render word cloud
-		if (currentWcSettings.source != 'edit-field') {
+		if (wordCloudSettings.source != 'edit-field') {
 
 			// get word list
-			currentWcSettings.list = prepareWordList(window["wc_wordList_" + currentWcSettings.id]);
+			wordCloudSettings.list = prepareWordList(window["wc_wordList_" + wordCloudSettings.id]);
 
-			currentWcSettings.maxWeight = getMaxWeight(currentWcSettings);
+			wordCloudSettings.maxWeight = getMaxWeight(wordCloudSettings);
 
-			currentWcSettings = setWcCallbacks(currentWcSettings);
+			wordCloudSettings = setWcCallbacks(wordCloudSettings);
 
 			// render word cloud
-			renderWordCloud(currentWcSettings);
+			renderWordCloud(wordCloudSettings);
 
 		// otherwise add textarea and button to trigger rendering manually
 		} else {
@@ -36,25 +37,25 @@
 
 			$(element).parent().prepend("<textarea></textarea>");
 
-			currentWcSettings.text = window["wc_text_" + currentWcSettings.id];
+			wordCloudSettings.text = window["wc_text_" + wordCloudSettings.id];
 
 			// if the backend send (demo) text, add it to the textarea
-			if (currentWcSettings.text != "") {
+			if (wordCloudSettings.text != "") {
 
-				$(element).parent().find('textarea').val(currentWcSettings.text);
+				$(element).parent().find('textarea').val(wordCloudSettings.text);
 		
-				var blackList = getBlackList(currentWcSettings.id);
+				var blackList = getBlackList(wordCloudSettings.id);
 	
-				currentWcSettings.list = countWords(			
+				wordCloudSettings.list = countWords(			
 					$(this).parent().find('textarea').val(), 
-					currentWcSettings,
+					wordCloudSettings,
 					blackList);
 		
-				currentWcSettings.maxWeight = getMaxWeight(currentWcSettings);
+				wordCloudSettings.maxWeight = getMaxWeight(wordCloudSettings);
 
-				currentWcSettings = setWcCallbacks(currentWcSettings);
+				wordCloudSettings = setWcCallbacks(wordCloudSettings);
 
-				renderWordCloud(currentWcSettings);
+				renderWordCloud(wordCloudSettings);
 				
 			}
 
@@ -62,7 +63,6 @@
 
 
 	});
-
 
 	// add trigger so user can remove words from black list
 	$(document).on("click", "span.black-list-item" , function() {
@@ -73,22 +73,22 @@
 
 	$('.render-word-cloud').click(function () {
 
-		var currentWcSettings = getWcSettings($(this).parent().find('canvas'));
+		var wordCloudSettings = getWcSettings($(this).parent().find('canvas'));
 
-		if (currentWcSettings['persistentBlackList'] == 0) {
+		if (wordCloudSettings['persistentBlackList'] == 0) {
 			
-			$('#black-list-' + currentWcSettings.id).children().remove();
+			$('#black-list-' + wordCloudSettings.id).children().remove();
 
 		} 
 
-		var blackList = getBlackList(currentWcSettings.id);
+		var blackList = getBlackList(wordCloudSettings.id);
 
-		currentWcSettings.list = countWords(			
+		wordCloudSettings.list = countWords(			
 			$(this).parent().find('textarea').val(), 
-			currentWcSettings,
+			wordCloudSettings,
 			blackList);
 
-		renderWordCloud(currentWcSettings);
+		renderWordCloud(wordCloudSettings);
 
 	});
 
@@ -243,32 +243,32 @@
 
 	function getWcSettings(element) {
 
-		var currentWcId = $(element).attr('id');
+		var wordCloudSetting = $(element).attr('id');
 
-		var currentWcSettings = window["wc_options_" + currentWcId];
+		var wordCloudSettings = window["wc_options_" + wordCloudSetting];
 
-		currentWcSettings.id = currentWcId;
+		wordCloudSettings.id = wordCloudSetting;
 
-		return currentWcSettings;
+		return wordCloudSettings;
 
 	}
 
-	function addWordToBlackList(item, currentWcSettings) {
+	function addWordToBlackList(item, wordCloudSettings) {
 
 		// save current word count to add it to black list
-		var wordCount = wordCounts[currentWcSettings.id][item[0]];
+		var wordCount = wordCounts[wordCloudSettings.id][item[0]];
 
 		// remove word from raw list
-		delete wordCounts[currentWcSettings.id][item[0]];
+		delete wordCounts[wordCloudSettings.id][item[0]];
 		
 		// prepare raw list to make it ready for word cloud renderer
-		currentWcSettings.list = prepareWordList(wordCounts[currentWcSettings.id], currentWcSettings);
+		wordCloudSettings.list = prepareWordList(wordCounts[wordCloudSettings.id], wordCloudSettings);
 
 		// add word to black list below the word cloud
-		$('#black-list-'+currentWcSettings.id).append('<span count='+wordCount+' class="black-list-item"><span class="black-list-word">' + item[0] + '</span><span class="black-list-word-removal">&#x2A2F;</span></span>');
+		$('#black-list-'+wordCloudSettings.id).append('<span count='+wordCount+' class="black-list-item"><span class="black-list-word">' + item[0] + '</span><span class="black-list-word-removal">&#x2A2F;</span></span>');
 
 		// render word cloud again
-		renderWordCloud(currentWcSettings);
+		renderWordCloud(wordCloudSettings);
 
 	}
 
@@ -277,16 +277,16 @@
 		// if user clicks on word below word cloud canvas
 		// it will be removed from black list
 
-		var currentWcSettings = getWcSettings($(item).parent().parent().find('canvas'));
+		var wordCloudSettings = getWcSettings($(item).parent().parent().find('canvas'));
 
 		// remove word from raw list
-		wordCounts[currentWcSettings.id][$(item).find('.black-list-word').text()] = parseInt($(item).attr('count'));
+		wordCounts[wordCloudSettings.id][$(item).find('.black-list-word').text()] = parseInt($(item).attr('count'));
 
-		currentWcSettings.list = prepareWordList(wordCounts[currentWcSettings.id], currentWcSettings);
+		wordCloudSettings.list = prepareWordList(wordCounts[wordCloudSettings.id], wordCloudSettings);
 
 		$(item).remove();
 
-		renderWordCloud(currentWcSettings);
+		renderWordCloud(wordCloudSettings);
 
 	}
 
