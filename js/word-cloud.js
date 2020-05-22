@@ -13,7 +13,7 @@
 
 		// add black list container
 		// contains words clicked by user
-		if (wpWordCloudSettings.customBlackList == 1) {
+		if (wpWordCloudSettings.enableCustomBlackList == 1) {
 
 			$(this).append('<p id="word-cloud-black-list-'+wpWordCloudSettings.id+'"></p>');
 
@@ -165,7 +165,7 @@
 
 		}
 		
-		processedSettings.customBlackList 	= settings['custom-black-list'];
+		processedSettings.enableCustomBlackList 	= settings['enable-custom-black-list'];
 		processedSettings.persistentCustomBlackList = settings['persistent-custom-black-list'];
 		
 		processedSettings.sizeFactor 		= parseInt(settings['size-factor']);
@@ -186,7 +186,6 @@
 
 		})
 		
-		console.log(blackList);
 		return blackList;
 
 	}
@@ -210,11 +209,7 @@
 				cleanWord = cleanWord.toLowerCase();
 
 			}
-			console.log(cleanWord);
-			console.log(settings.customBlackList);
-			console.log(settings.blackList);
-			console.log(settings.blackList[cleanWord]);
-			console.log('----------');
+			
 			if (typeof(settings.customBlackList[cleanWord]) === 'undefined' && 
 				!settings.blackList.includes(cleanWord) 
 			) {
