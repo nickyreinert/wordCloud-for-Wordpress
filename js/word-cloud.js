@@ -166,6 +166,11 @@
 		}
 		
 		processedSettings.enableCustomBlackList 	= settings['enable-custom-black-list'];
+		if (processedSettings.enableCustomBlackList == 1) {
+
+			processedSettings.customBlackList 	= {};
+
+		}
 		processedSettings.persistentCustomBlackList = settings['persistent-custom-black-list'];
 		
 		processedSettings.sizeFactor 		= parseInt(settings['size-factor']);
@@ -209,7 +214,7 @@
 				cleanWord = cleanWord.toLowerCase();
 
 			}
-			
+
 			if (typeof(settings.customBlackList[cleanWord]) === 'undefined' && 
 				!settings.blackList.includes(cleanWord) 
 			) {
