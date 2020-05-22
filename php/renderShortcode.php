@@ -21,31 +21,56 @@ final class WPWordCloud {
 
     }
 
+
+	/**
+	 * Get global settings from settings page and 
+	 * overwrite with individual settings from shortcode
+	 * 
+	 * @param {array} individual_settings Objects containing settings from shortcode
+	 * 
+	 */
+
 	private function getSettings($individual_settings) {
 
-		// get default value aka global value from settings page
 		$global_settings = [];
 
 		foreach (wp_word_cloud_get_global_settings() as $name => $value) {
 
+			// if global setting is a public one
+			// get it's name and the value, which user defines on settings page
 			if ($value['hidden'] === FALSE) {
 			
 				$global_settings[$name] = get_option($name, $value['default']);
 
+			// otherwise set this value to NULL
 			} else {
 
-				$global_settings[$name] = 'secret';
+				$global_settings[$name] = NULL;
 
 			}
+
 		}
 
-		// overwrite global settings with given individual settings in post / page
+		// overwrite global settings with given individual settings from shortcode
 		$this->settings = shortcode_atts(
 
 			($global_settings), ($individual_settings)
 			
 		);
 		
+		switch ($this->settings['text-transform']) {
+
+			case 'uppercase':
+				$this->settings['black-list'] = strtoupper($this->settings['black-list']);
+				break;
+
+			case 'lowercase':
+				$this->settings['black-list'] = strtolower($this->settings['black-list']);
+				break;
+
+		}
+		// check if required mandatory setting is given in shortcode
+		// id needs to be unique, as you can use the shortcode multiple times
 		if ($this->settings['id'] == NULL) {
 
 			$this->error = 'No unique id given. Please use parameter `id`.';
@@ -54,102 +79,13 @@ final class WPWordCloud {
 
 	}
 
-	private function getWordList() {
-
-		$data = NULL;
-		$wordList = array();
-		
-		switch ($this->options['source']) {
-
-			
-			/**
-			 * Edit field in frontend 
-			 * @since    1.1.0
-			 */
-			// we dont need to extract the word list from somewhere
-			// calculation will be done at frontend
-			case 'edit-field':
-				
-				break;
-
-			case 'custom-field':
-
-				$customFieldId = $this->options['source-id'];
-
-				$customFieldContentArray = explode(PHP_EOL, get_post_meta(get_the_ID(), $customFieldId, TRUE));
-
-				if (sizeof($customFieldContentArray) <= 1 AND $customFieldContentArray[0] == '') {
-
-					$this->error = '<p class="word-cloud--warning">Could not read data from custom-field `'.$this->options['custom-field-name'].'`!</p>';
-
-				}
-				
-				foreach ($customFieldContentArray as $row) {
-					
-					$wordCount = explode(",", $row);
-					
-					$wordList[] = array('xValue' => trim($wordCount[0], "\r\n "), 'yValue' => trim($wordCount[1], "\r\n "));
-					
-				}
-
-				break;
-				
-			case 'sql':
-			
-				global $wpdb;
-
-				$wpdb->show_errors(); 
-
-				$sql = $wpdb->prepare($this->options['query']);
-				
-				$data = $wpdb->get_results($sql);
-				
-				foreach ($data as $row) {
-						
-					$wordList[] = array('xValue' => trim($row->word, "\r\n "), 'yValue' => trim($row->count, "\r\n "));
-
-				}
-	
-				break;
-		}
-
-		$this->wordList = $wordList;
-		
-	}
-
 	private function createDomData() {
 
-		// send three things to the frontend
-		// - settings (settings from short code)
-		// - words (contains words and occurences)
-		// - text (contains raw text, currently only for demo purposes)
-
-		// $result = "<foobar></foobar><script type='text/javascript'>".
-		// 	"wp_word_cloud_data.".$this->settings['id'].".settings = ".json_encode($this->settings).";".PHP_EOL.
-		// 	"wp_word_cloud_data.".$this->settings['id'].".words = ".json_encode($this->words).";".PHP_EOL.
-		// "</script>";
-
-		// put settings into java script object and send it to frontend
+		// put settings object into java script object and send it to frontend
 		wp_localize_script( "word-cloud", "word_cloud_settings_".$this->settings['id'], $this->settings );
 
 		// send canvas to frontend containing address of the object
-		$result = "<canvas class='word-cloud' settings='word_cloud_settings_".$this->settings['id']."' id='word-cloud-".$this->settings['id']."'></canvas>".PHP_EOL;
-
-		// $result .= "<canvas style='width: 100%;' class='wordCloud' id='".$this->options['target-id']."' width='".$this->options['canvas-width']."' height='".$this->options['canvas-height']."'></canvas>".PHP_EOL;
-
-		// $result .= "<div id='".$this->options['target-id']."-container' class='wordCloud-container'>".PHP_EOL;
-		
-		// $result .= "var wc_wordList_".$this->options['target-id']." = ".json_encode($this->wordList).";".PHP_EOL;
-		// $result .= "var wc_options_".$this->options['target-id']." = ".json_encode($this->options).";".PHP_EOL;
-
-		// if ($this->options['demo-data'] == TRUE) {
-
-		// 	$result .= "var wc_text_".$this->options['target-id']." = ".json_encode($this->demoData).";";
-
-		// }
-
-		// $result .= "</script>";
-		// $result .= "</div>";
+		$result = "<div class='word-cloud-container' settings='word_cloud_settings_".$this->settings['id']."' id='word-cloud-container-".$this->settings['id']."'></div>";
 		
 		return $result;
 
@@ -178,25 +114,100 @@ final class WPWordCloud {
 
 	}
 
+	private function countWords($words) {
+
+		return $words;
+
+	}
+
+	private function getDataFromSource() {
+
+		// if user wants to use demo text
+		// move demo text to actual text property
+
+		if ($this->settings['use-demo-text'] == TRUE) {
+
+			if ($this->settings['count-words'] == TRUE) {
+
+				$this->settings['words'] = $this->countWords($this->settings['demo-text']);
+
+			} else {
+
+				$this->settings['text'] = $this->settings['demo-text'];
+
+			}
+
+			// save space
+			$this->settings['demo-text'] = NULL;
+
+		// otherwise get text from given source
+		} else {
+
+			switch ($this->settings['source']) {
+
+				case 'edit-field':
+					// get text from text field on frontend
+					// only listing this for further reference
+					// nothing to do here
+					break;
+	
+				case 'custom-field':
+					// get text from custom field on page / post
+					$customFieldId = $this->settings['source-definition'];
+	
+					$customFieldContent = get_post_meta(get_the_ID(), $customFieldId, TRUE);
+
+					if ($this->settings['count-words'] == 1) {
+
+						$this->settings['words'] = $this->countWords($customFieldContent);
+
+					} else {
+
+						$this->settings['words'] = $customFieldContent;
+
+					}
+
+					break;
+					
+				case 'sql':
+
+					// get text from data base using sql 
+					global $wpdb;
+	
+					$wpdb->show_errors(); 
+	
+					$sql = $wpdb->prepare($this->settings['query']);
+					
+					$data = $wpdb->get_results($sql);
+
+					foreach ($data as $row) {
+							
+						$wordList[] = [$row->word, $row->count];
+	
+					}
+		
+					break;
+			}
+
+		}
+
+	}
+
     public function initWordCloud($individual_settings, $content = NULL) {
 
-		// load required javascript and css files
-		$this->enqueueDepencies();
-
-		// individual_settings come from short code
 		$this->getSettings($individual_settings);
 
-		$this->getWordList();
+		$this->enqueueDepencies();
+
+		$this->getDataFromSource();
 
 		if ($this->error != NULL) {
 
-			return $this->error;
+			return '<p class="word-cloud-warning">'.$this->error.'</p>';
 
 		}
-		
-		$result = $this->createDomData();
 
-		return $result;
+		return $this->createDomData();
 
     }
 }

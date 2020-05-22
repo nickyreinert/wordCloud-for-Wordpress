@@ -3,13 +3,25 @@
     add_action( 'admin_init', 'wp_word_cloud_register_settings' );
     add_action('admin_menu', 'wp_word_cloud_register_options_page');
 
+    /**
+	 * Return object of global settings, default values and
+	 * and description
+     * 
+	 */
+
     function wp_word_cloud_get_global_settings() {
 
         return [
-			'functional-words' 	=> ['default' => 'der die das',         'hidden' => false, 'description' => 'Funktionswörter werden mitgezählt, sind in der Word Cloud aber standardmäßig ausgeblendet. Füge hier die Funktionswörter ein. Trenne die Wörter mit einem Leerzeichen'],
-			'source'			=> ['default' => 'edit-field',          'hidden' => false, 'description' => NULL],
-			'query'				=> ['default' => NULL,                  'hidden' => false, 'description' => NULL],
-			'custom-field-name'	=> ['default' => NULL,                  'hidden' => false, 'description' => NULL],
+			'source'			=> ['default' => 'edit-field',          'hidden' => false, 'description' => 'Woher kommt die Liste gezählter Wörter? Möglich sind edit-field, sql und custom-field'],
+			'source-definition'	=> ['default' => NULL,                  'hidden' => false, 'description' => 'Enthält je nach Quelle entweder eine SQL-Abfrage den Namen eines custom fields.'],
+			'count-words'	    => ['default' => 0,                     'hidden' => false, 'description' => 'Enthält die Quelle Text und müssen die Wörter erst gezählt werden?'],
+			'min-word-length'	=> ['default' => 2,                     'hidden' => false, 'description' => 'Wie lange muss ein Wort mindestens sein, um gezählt zu werden?'],
+			'min-word-occurence'=> ['default' => 2,                     'hidden' => false, 'description' => 'Wie oft muss ein Wort mindestens vorkommen, um in der Word Cloud gezeichnet zu werden?'],
+			'black-list'     	=> ['default' => 'der die das',         'hidden' => false, 'description' => 'Wörter (z.B. Funktionswörter), die beim Zählen ignoriert werden sollen. Die Wörter werden hier mit Leerzeichen getrennt angegeben.'],
+			'enable-black-list'	=> ['default' => 1,                     'hidden' => false, 'description' => 'Nutze die Blacklist.'],
+			'custom-black-list'	=> ['default' => 1,                     'hidden' => false, 'description' => 'Soll der Nutzer Wörter per Klick aus der Wortcloud entfernen können?'],
+			'persistent-custom-black-list'	=> ['default' => 1,         'hidden' => false, 'description' => 'Bleibt die benutzerdefinierte Blacklist erhalten, wenn der Nutzer einen neuen Text hinzufügt?'],
+			'ignore-chars'		=> ['default' => '\(\)\[\]\,\.;',       'hidden' => false, 'description' => 'Regulärer Ausdruck um bestimmte Zeichen beim Zählen von Wörtern zu ignorieren.'],
 			'background-color'	=> ['default' => 'rgba(255,255,255,0)', 'hidden' => false, 'description' => NULL],
 			'grid-size'			=> ['default' => 1,                     'hidden' => false, 'description' => NULL],
 			'font-family'		=> ['default' => 'Arial, sans-serif',   'hidden' => false, 'description' => NULL],
@@ -26,13 +38,8 @@
 			'ellipticity'		=> ['default' => 1,                     'hidden' => false, 'description' => NULL],
 			'use-demo-text'		=> ['default' => 1,                     'hidden' => false, 'description' => NULL],
 			'demo-text'		    => ['default' => 'Lorem Ipsum ',        'hidden' => false, 'description' => NULL],
-			'tex-transform'		=> ['default' => 'uppercase',           'hidden' => false, 'description' => NULL],
-			'persistent-black-list'	=> ['default' => 1,                 'hidden' => false, 'description' => 'Soll die Blacklist erhalten bleiben, wenn die Word Cloud neu gezeichnet wird?'],
-			'enable-black-list'	=> ['default' => 1,                     'hidden' => false, 'description' => 'Ermöglicht das Hinzufügen von Wörtern zur Blacklist im Frontend.'],
+			'text-transform'	=> ['default' => 'uppercase',           'hidden' => false, 'description' => NULL],
 			'clear-canvas'		=> ['default' => 1,                     'hidden' => false, 'description' => NULL],
-			'min-word-length'	=> ['default' => 2,                     'hidden' => false, 'description' => 'Wie lange muss ein Wort mindestens sein, um gezählt zu werden?'],
-			'min-word-occurence'=> ['default' => 2,                     'hidden' => false, 'description' => 'Wie oft muss ein Wort mindestens vorkommen, um in der Word Cloud gezeichnet zu werden?'],
-			'ignore-chars'		=> ['default' => '\(\)\[\]\,\.;',       'hidden' => false, 'description' => 'Regulärer Ausdruck um bestimmte Zeichen beim Zählen von Wörtern zu ignorieren.'],
 			'min-alpha'			=> ['default' => 0.1,                   'hidden' => false, 'description' => NULL],
 			'id'				=> ['default' => "1",                   'hidden' => true, 'description' => 'Id die für die Word Cloud verwendet wird. Muss auf Seitenebene eindeutig sein.']
         ];
