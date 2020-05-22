@@ -1,102 +1,183 @@
 (function ($) {
 	'use strict';
 
-	// object contains word cloud data
+	// init
+	// go through all word cloud containers
+	// to receive word cloud settings 
+	$(".word-cloud-container").each(function () {
 
-	// go through all canvas elements to receive word cloud settings and
-	// render word cloud
-	$(".word-cloud").each(function (index, element) {
+		var wpWordCloudSettings = getWordCloudSettings(this);
 
-		// var wordCloudSettings = getWcSettings(element);
-		var wordCloudSettings = window[$(element).attr('settings')];
+		// add canvas
+		$(this).append('<canvas class="word-cloud" style="width: 100%" height="'+wpWordCloudSettings.canvasHeight+'" width="'+wpWordCloudSettings.canvasWidth+'" id="word-cloud-'+wpWordCloudSettings.id+'"></canvas>');
 
-		console.log(wordCloudSettings);
-		// add black list
-		$(element).parent().append("<p id='black-list-"+wordCloudSettings.id+"'></p>");
+		// add black list container
+		// contains words clicked by user
+		if (wpWordCloudSettings.customBlackList == 1) {
 
-		// add hover element, hidden on init
-		$(element).parent().append("<div class='word-details' id='word-details-"+wordCloudSettings.id+"'>foobar</div>");
-		
-		// if text comes from backend render word cloud
-		if (wordCloudSettings.source != 'edit-field') {
+			$(this).append('<p id="word-cloud-black-list-'+wpWordCloudSettings.id+'"></p>');
 
-			// get word list
-			wordCloudSettings.list = prepareWordList(window["wc_wordList_" + wordCloudSettings.id]);
+		}
 
-			wordCloudSettings.maxWeight = getMaxWeight(wordCloudSettings);
+		// add hover container
+		// hiden on init
+		$(this).append('<div class="word-cloud-tooltip" id="word-cloud-tooltip-'+wpWordCloudSettings.id+'"></div>');
 
-			wordCloudSettings = setWcCallbacks(wordCloudSettings);
+		if (wpWordCloudSettings.source == 'edit-field') {
 
-			// render word cloud
-			renderWordCloud(wordCloudSettings);
+				$(this).prepend('<button class="render-word-cloud" id="word-cloud-tooltip-'+wpWordCloudSettings.id+'">Erstellen</button>');
 
-		// otherwise add textarea and button to trigger rendering manually
-		} else {
+				$(this).prepend('<textarea class="word-cloud-text" id="word-cloud-text-'+wpWordCloudSettings.id+'"></textarea>');
 
-			$(element).parent().prepend("<button class='render-word-cloud'>Erstellen</button>");
+			if (wpWordCloudSettings.useDemoText == 1) {
 
-			$(element).parent().prepend("<textarea></textarea>");
+				$('#word-cloud-text-'+wpWordCloudSettings.id).text(wpWordCloudSettings.text);
 
-			wordCloudSettings.text = window["wc_text_" + wordCloudSettings.id];
+				wpWordCloudSettings.list = countWords(wpWordCloudSettings);
 
-			// if the backend send (demo) text, add it to the textarea
-			if (wordCloudSettings.text != "") {
-
-				$(element).parent().find('textarea').val(wordCloudSettings.text);
-		
-				var blackList = getBlackList(wordCloudSettings.id);
-	
-				wordCloudSettings.list = countWords(			
-					$(this).parent().find('textarea').val(), 
-					wordCloudSettings,
-					blackList);
-		
-				wordCloudSettings.maxWeight = getMaxWeight(wordCloudSettings);
-
-				wordCloudSettings = setWcCallbacks(wordCloudSettings);
-
-				renderWordCloud(wordCloudSettings);
-				
 			}
 
 		}
 
+		wpWordCloudSettings.maxWeight = getMaxWeight(wpWordCloudSettings);
+		
+		wpWordCloudSettings = setWcCallbacks(wpWordCloudSettings);
 
-	});
-
-	// add trigger so user can remove words from black list
-	$(document).on("click", "span.black-list-item" , function() {
-
-		removeWordFromBlackList($(this));
+		WordCloud($('#word-cloud-' + wpWordCloudSettings.id)[0], wpWordCloudSettings);
 
 	});
 
 	$('.render-word-cloud').click(function () {
 
-		var wordCloudSettings = getWcSettings($(this).parent().find('canvas'));
+		var wpWordCloudSettings = getWordCloudSettings($(this).parent());
 
-		if (wordCloudSettings['persistentBlackList'] == 0) {
+		if (wpWordCloudSettings.persistentCustomBlackList == 0) {
 			
-			$('#black-list-' + wordCloudSettings.id).children().remove();
+			$('#word-cloud-black-list-' + wpWordCloudSettings.id).children().remove();
 
 		} 
 
-		var blackList = getBlackList(wordCloudSettings.id);
+		wpWordCloudSettings.text = $('#word-cloud-text-'+wpWordCloudSettings.id).val();
 
-		wordCloudSettings.list = countWords(			
-			$(this).parent().find('textarea').val(), 
-			wordCloudSettings,
-			blackList);
+		wpWordCloudSettings.customBlackList = getCustomBlackList(wpWordCloudSettings);
 
-		renderWordCloud(wordCloudSettings);
+		wpWordCloudSettings.list = countWords(wpWordCloudSettings);
+
+		wpWordCloudSettings.maxWeight = getMaxWeight(wpWordCloudSettings);
+		
+		wpWordCloudSettings = setWcCallbacks(wpWordCloudSettings);
+
+		WordCloud($('#word-cloud-' + wpWordCloudSettings.id)[0], wpWordCloudSettings);
 
 	});
 
-	function getBlackList(id) {
+	function addWordToBlackList(item, settings) {
+
+		// add word to black list below the word cloud
+		$('#word-cloud-black-list-'+settings.id).append('<span count='+item[1]+' class="black-list-item"><span class="black-list-word">' + item[0] + '</span><span class="black-list-word-removal">&#x2A2F;</span></span>');
+
+		settings.customBlackList = getCustomBlackList(settings);
+		
+		settings.list = countWords(settings);
+
+		settings.maxWeight = getMaxWeight(settings);
+		
+		settings = setWcCallbacks(settings);
+
+		WordCloud($('#word-cloud-' + settings.id)[0], settings);
+
+	}
+
+	// add trigger so user can remove words from black list
+	$(document).on("click", "span.black-list-item" , function() {
+
+		// if user clicks on word below word cloud canvas
+		// it will be removed from black list
+
+		console.log($(this).parent().parent());
+		var settings = getWordCloudSettings($(this).parent().parent());
+
+		$(this).remove();
+
+		settings.customBlackList = getCustomBlackList(settings);
+		
+		settings.list = countWords(settings);
+
+		settings.maxWeight = getMaxWeight(settings);
+		
+		settings = setWcCallbacks(settings);
+
+		WordCloud($('#word-cloud-' + settings.id)[0], settings);
+
+	});
+
+	function getWordCloudSettings(element) {
+
+		// transfer settings to word cloud object
+		// the shortcode does not allowe camel case, but the
+		// word cloud library has camel case settings
+		// that's why manually need to transfer settings from the backend
+		// to the word cloud library setting object
+
+		var settings = window[$(element).attr('settings')];
+
+		var processedSettings = {};
+		
+		// original library settings (required)
+		processedSettings.list 				= settings['list'];
+		processedSettings.backgroundColor 	= settings['background-color'];
+		processedSettings.gridSize 			= settings['grid-size'];
+		processedSettings.fontFamily 		= settings['font-family'];
+		processedSettings.minSize 			= settings['min-size'];
+		processedSettings.fontWeight 		= settings['font-weight'];
+		processedSettings.minRotation 		= settings['min-rotation'];
+		processedSettings.maxRotation 		= settings['max-rotation'];
+		processedSettings.shape 			= settings['shape'];
+		processedSettings.drawOutOfBound 	= settings['draw-out-of-bound'];
+		processedSettings.shuffle 			= settings['shuffle'];
+		processedSettings.ellipticity 		= settings['ellipticity'];
+		processedSettings.clearCanvas 		= settings['clear-canvas'];
+
+		// own settings
+		processedSettings.id 				= settings['id'];
+		processedSettings.source 			= settings['source'];
+		processedSettings.canvasWidth 		= settings['canvas-width'];
+		processedSettings.canvasHeight 		= settings['canvas-height'];
+		processedSettings.minAlpha 			= settings['min-alpha'];
+		
+		processedSettings.text 				= settings['text'];
+		processedSettings.useDemoText 		= settings['use-demo-text'];
+		processedSettings.demoText 			= settings['demo-text'];
+		processedSettings.textTransform 	= settings['text-transform'];
+
+		processedSettings.countWords 		= settings['count-words'];
+		processedSettings.ignoreChars 		= settings['ignore-chars'];
+		processedSettings.minWordLength 	= settings['min-word-length'];
+		processedSettings.minWordOccurence 	= settings['min-word-occurence'];
+
+		if (settings['enable-black-list'] == 1) {
+			
+			processedSettings.blackList		= settings['black-list'].split(' ');
+
+		} else {
+
+			processedSettings.blackList 	= '';
+
+		}
+		
+		processedSettings.customBlackList 	= settings['custom-black-list'];
+		processedSettings.persistentCustomBlackList = settings['persistent-custom-black-list'];
+		
+		processedSettings.sizeFactor 		= parseInt(settings['size-factor']);
+
+		return processedSettings;
+	}
+
+	function getCustomBlackList(settings) {
 
 		var blackList = {};
 
-		$('#black-list-' + id).children().each(function(){
+		$('#word-cloud-black-list-' + settings.id).children().each(function(){
 
 			var count = $(this).attr('count');
 			var word = $(this).find('.black-list-word').html();
@@ -105,43 +186,48 @@
 
 		})
 		
+		console.log(blackList);
 		return blackList;
 
 	}
 
-	function countWords(text, settings, blackList) {
+	function countWords(settings) {
 
-		var textArray = text.split(' ');
-		var wordCount = {};
-
+		var textArray = settings.text.split(' ');
+		settings.list = {};
 
 		// first count the words
 		$.each(textArray, function(index, word){
 
-			var cleanWord = word.replace(new RegExp('['+settings['ignore-chars']+']'), '');
+			var cleanWord = word.replace(new RegExp('['+settings.ignoreChars+']'), '');
 			
-			if (settings['textTransform'] == 'uppercase') {
+			if (settings.textTransform == 'uppercase') {
 
 				cleanWord = cleanWord.toUpperCase();
 
-			} else if (settings['textTransform'] == 'lowercase') {
-
+			} else if (settings.textTransform == 'lowercase') {
 
 				cleanWord = cleanWord.toLowerCase();
 
 			}
+			console.log(cleanWord);
+			console.log(settings.customBlackList);
+			console.log(settings.blackList);
+			console.log(settings.blackList[cleanWord]);
+			console.log('----------');
+			if (typeof(settings.customBlackList[cleanWord]) === 'undefined' && 
+				!settings.blackList.includes(cleanWord) 
+			) {
 
-			if (typeof(blackList[cleanWord]) === 'undefined') {
+				if (cleanWord.length >= settings.minWordLength) {
 
-				if (cleanWord.length >= settings['min-word-length']) {
-
-					if (cleanWord in wordCount) {
+					if (cleanWord in settings.list) {
 						
-						wordCount[cleanWord] = wordCount[cleanWord] + 1;
+						settings.list[cleanWord] = settings.list[cleanWord] + 1;
 
 					} else {
 
-						wordCount[cleanWord] = 1;
+						settings.list[cleanWord] = 1;
 	
 					}
 
@@ -150,26 +236,8 @@
 			}
 
 		});
-		
-		wordCounts[settings.id] = wordCount;
 
-		return prepareWordList(wordCount, settings);
-
-	}
-
-	/**
-	 * Actually render the word cloud based on word count
-	 * 
-	 * @param {object} wcSettings Object contains settings and word list with word count
-	 * 
-	 */
-	function renderWordCloud(wcSettings) {
-
-		wcSettings.maxWeight = getMaxWeight(wcSettings);
-
-		wcSettings = setWcCallbacks(wcSettings);
-
-		WordCloud($('#' + wcSettings['target-id'])[0], wcSettings);
+		return prepareWordList(settings);
 
 	}
 
@@ -198,9 +266,9 @@
 			// have fun ;)
 			var alpha = 1 - Math.round(10 * 
 				(
-					(1 - settings['min-alpha']) - (
-						(weight - settings['min-word-occurence']) / 
-						(settings.maxWeight - settings['min-word-occurence']))
+					(1 - settings.minAlpha) - (
+						(weight - settings.minWordOccurence) / 
+						(settings.maxWeight - settings.minWordOccurence))
 					
 				)) / 10;
 
@@ -209,13 +277,14 @@
 		};
 
 		settings.weightFactor = function (size) {
-		
-			return size * $('#'+settings['target-id']).width() / settings.sizeFactor;
+
+			return size * $('#word-cloud-'+settings.id).width() / (settings.sizeFactor * (settings.maxWeight / 15));
+			
 			// return Math.pow(size, 2.5) * $('#myWordCloud2').width() / 256;
 		
 		};
 
-			// if user clicks a word, it will be removed from the list and added to 
+		// if user clicks a word, it will be removed from the list and added to 
 		// an ignore list
 		settings.click = function (item, dimension, event) {
 
@@ -225,15 +294,15 @@
 
 		settings.hover = function (item, dimension, event) {
 
-			if (item != undefined) {
+			// if (item != undefined) {
 
-				$('#word-details-' + settings.id).text(item[1]);
+			// 	$('#word-cloud-tooltip-' + settings.id).text(item[1]);
 
-				$('#word-details-' + settings.id).toggle();
+			// 	$('#word-cloud-tooltip-' + settings.id).toggle();
 
-				$('#word-details-' + settings.id).css({left: event.pageX - 10 - $('#word-details-' + settings.id).width(), top: event.pageY - $('#word-details-' + settings.id).height()});
+			// 	$('#word-cloud-tooltip-' + settings.id).css({left: event.pageX - 10 - $('#word-details-' + settings.id).width(), top: event.pageY - $('#word-cloud-tooltip-' + settings.id).height()});
 	
-			}
+			// }
 
 		};
 
@@ -241,67 +310,13 @@
 
 	}
 
-	function getWcSettings(element) {
-
-		var wordCloudSetting = $(element).attr('id');
-
-		var wordCloudSettings = window["wc_options_" + wordCloudSetting];
-
-		wordCloudSettings.id = wordCloudSetting;
-
-		return wordCloudSettings;
-
-	}
-
-	function addWordToBlackList(item, wordCloudSettings) {
-
-		// save current word count to add it to black list
-		var wordCount = wordCounts[wordCloudSettings.id][item[0]];
-
-		// remove word from raw list
-		delete wordCounts[wordCloudSettings.id][item[0]];
-		
-		// prepare raw list to make it ready for word cloud renderer
-		wordCloudSettings.list = prepareWordList(wordCounts[wordCloudSettings.id], wordCloudSettings);
-
-		// add word to black list below the word cloud
-		$('#black-list-'+wordCloudSettings.id).append('<span count='+wordCount+' class="black-list-item"><span class="black-list-word">' + item[0] + '</span><span class="black-list-word-removal">&#x2A2F;</span></span>');
-
-		// render word cloud again
-		renderWordCloud(wordCloudSettings);
-
-	}
-
-	function removeWordFromBlackList(item) {
-
-		// if user clicks on word below word cloud canvas
-		// it will be removed from black list
-
-		var wordCloudSettings = getWcSettings($(item).parent().parent().find('canvas'));
-
-		// remove word from raw list
-		wordCounts[wordCloudSettings.id][$(item).find('.black-list-word').text()] = parseInt($(item).attr('count'));
-
-		wordCloudSettings.list = prepareWordList(wordCounts[wordCloudSettings.id], wordCloudSettings);
-
-		$(item).remove();
-
-		renderWordCloud(wordCloudSettings);
-
-	}
-
-	// prepare word list for rendering:
-	// 0: Object { xValue: "Foobar", yValue: "5" }
-	// 1: Object { xValue: "Welt", yValue: "2" }
-	// 2: Object { xValue: "Test", yValue: "10" }
-
-	function prepareWordList(wordCount, settings) {
+	function prepareWordList(settings) {
 
 		var preparedWordList = [];
 
-		$.each(wordCount, function(word, count){
+		$.each(settings.list, function(word, count){
 
-			if (count >= settings['min-word-occurence']) {
+			if (count >= settings.minWordOccurence) {
 
 				preparedWordList.push([word, count]);
 
