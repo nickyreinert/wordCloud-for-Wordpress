@@ -6,9 +6,12 @@
 	// to receive word cloud settings 
 	$(".word-cloud-container").each(function () {
 
+		console.log(this);
+
 		var wpWordCloudSettings = getWordCloudSettings(this);
 
 		// add canvas
+		$(this).append('<div class="word-cloud-controller"></div>');
 		$(this).append('<canvas class="word-cloud" style="width: 100%" height="'+wpWordCloudSettings.canvasHeight+'" width="'+wpWordCloudSettings.canvasWidth+'" id="word-cloud-'+wpWordCloudSettings.id+'"></canvas>');
 
 		// add black list container
@@ -25,7 +28,7 @@
 
 		if (wpWordCloudSettings.source == 'edit-field') {
 
-				$(this).prepend('<button class="render-word-cloud" id="word-cloud-tooltip-'+wpWordCloudSettings.id+'">Erstellen</button>');
+				$(this).find('.word-cloud-controller').prepend('<button class="render-word-cloud" id="render-word-cloud-'+wpWordCloudSettings.id+'">Erstellen</button>');
 
 				$(this).prepend('<textarea class="word-cloud-text" id="word-cloud-text-'+wpWordCloudSettings.id+'"></textarea>');
 
@@ -35,21 +38,21 @@
 
 				wpWordCloudSettings.list = countWords(wpWordCloudSettings);
 
+				wpWordCloudSettings.maxWeight = getMaxWeight(wpWordCloudSettings);
+		
+				wpWordCloudSettings = setWcCallbacks(wpWordCloudSettings);
+		
+				WordCloud($('#word-cloud-' + wpWordCloudSettings.id)[0], wpWordCloudSettings);
+		
 			}
 
 		}
 
-		wpWordCloudSettings.maxWeight = getMaxWeight(wpWordCloudSettings);
-		
-		wpWordCloudSettings = setWcCallbacks(wpWordCloudSettings);
-
-		WordCloud($('#word-cloud-' + wpWordCloudSettings.id)[0], wpWordCloudSettings);
-
 	});
 
-	$('.render-word-cloud').click(function () {
+	$('.render-word-cloud').click(function() {
 
-		var wpWordCloudSettings = getWordCloudSettings($(this).parent());
+		var wpWordCloudSettings = getWordCloudSettings($(this).parent().parent()[0]);
 
 		if (wpWordCloudSettings.persistentCustomBlackList == 0) {
 			
@@ -94,8 +97,7 @@
 		// if user clicks on word below word cloud canvas
 		// it will be removed from black list
 
-		console.log($(this).parent().parent());
-		var settings = getWordCloudSettings($(this).parent().parent());
+		var settings = getWordCloudSettings($(this).parent().parent()[0]);
 
 		$(this).remove();
 
@@ -110,73 +112,6 @@
 		WordCloud($('#word-cloud-' + settings.id)[0], settings);
 
 	});
-
-	function getWordCloudSettings(element) {
-
-		// transfer settings to word cloud object
-		// the shortcode does not allowe camel case, but the
-		// word cloud library has camel case settings
-		// that's why manually need to transfer settings from the backend
-		// to the word cloud library setting object
-
-		var settings = window[$(element).attr('settings')];
-
-		var processedSettings = {};
-		
-		// original library settings (required)
-		processedSettings.list 				= settings['list'];
-		processedSettings.backgroundColor 	= settings['background-color'];
-		processedSettings.gridSize 			= settings['grid-size'];
-		processedSettings.fontFamily 		= settings['font-family'];
-		processedSettings.minSize 			= settings['min-size'];
-		processedSettings.fontWeight 		= settings['font-weight'];
-		processedSettings.minRotation 		= settings['min-rotation'];
-		processedSettings.maxRotation 		= settings['max-rotation'];
-		processedSettings.shape 			= settings['shape'];
-		processedSettings.drawOutOfBound 	= settings['draw-out-of-bound'];
-		processedSettings.shuffle 			= settings['shuffle'];
-		processedSettings.ellipticity 		= settings['ellipticity'];
-		processedSettings.clearCanvas 		= settings['clear-canvas'];
-
-		// own settings
-		processedSettings.id 				= settings['id'];
-		processedSettings.source 			= settings['source'];
-		processedSettings.canvasWidth 		= settings['canvas-width'];
-		processedSettings.canvasHeight 		= settings['canvas-height'];
-		processedSettings.minAlpha 			= settings['min-alpha'];
-		
-		processedSettings.text 				= settings['text'];
-		processedSettings.useDemoText 		= settings['use-demo-text'];
-		processedSettings.demoText 			= settings['demo-text'];
-		processedSettings.textTransform 	= settings['text-transform'];
-
-		processedSettings.countWords 		= settings['count-words'];
-		processedSettings.ignoreChars 		= settings['ignore-chars'];
-		processedSettings.minWordLength 	= settings['min-word-length'];
-		processedSettings.minWordOccurence 	= settings['min-word-occurence'];
-
-		if (settings['enable-black-list'] == 1) {
-			
-			processedSettings.blackList		= settings['black-list'].split(' ');
-
-		} else {
-
-			processedSettings.blackList 	= '';
-
-		}
-		
-		processedSettings.enableCustomBlackList 	= settings['enable-custom-black-list'];
-		if (processedSettings.enableCustomBlackList == 1) {
-
-			processedSettings.customBlackList 	= {};
-
-		}
-		processedSettings.persistentCustomBlackList = settings['persistent-custom-black-list'];
-		
-		processedSettings.sizeFactor 		= parseInt(settings['size-factor']);
-
-		return processedSettings;
-	}
 
 	function getCustomBlackList(settings) {
 
@@ -294,15 +229,15 @@
 
 		settings.hover = function (item, dimension, event) {
 
-			// if (item != undefined) {
+			if (item != undefined) {
 
-			// 	$('#word-cloud-tooltip-' + settings.id).text(item[1]);
+				$('#word-cloud-tooltip-' + settings.id).text(item[1]);
 
-			// 	$('#word-cloud-tooltip-' + settings.id).toggle();
+				$('#word-cloud-tooltip-' + settings.id).toggle();
 
-			// 	$('#word-cloud-tooltip-' + settings.id).css({left: event.pageX - 10 - $('#word-details-' + settings.id).width(), top: event.pageY - $('#word-cloud-tooltip-' + settings.id).height()});
+				$('#word-cloud-tooltip-' + settings.id).css({left: event.pageX - 10 - $('#word-details-' + settings.id).width(), top: event.pageY - $('#word-cloud-tooltip-' + settings.id).height()});
 	
-			// }
+			}
 
 		};
 

@@ -15,6 +15,7 @@
 			'source'			=> ['default' => 'edit-field',          'hidden' => false, 'description' => 'Woher kommt die Liste gezählter Wörter? Möglich sind edit-field, sql und custom-field'],
 			'source-definition'	=> ['default' => NULL,                  'hidden' => false, 'description' => 'Enthält je nach Quelle entweder eine SQL-Abfrage den Namen eines custom fields.'],
 			'count-words'	    => ['default' => 0,                     'hidden' => false, 'description' => 'Enthält die Quelle Text und müssen die Wörter erst gezählt werden?'],
+			'enable-ocr'        => ['default' => 0,                     'hidden' => false, 'description' => 'Ermögliche das Hinzufügen von Texten direkt von der Kamera des Gerätes.'],
 			'min-word-length'	=> ['default' => 2,                     'hidden' => false, 'description' => 'Wie lange muss ein Wort mindestens sein, um gezählt zu werden?'],
 			'min-word-occurence'=> ['default' => 2,                     'hidden' => false, 'description' => 'Wie oft muss ein Wort mindestens vorkommen, um in der Word Cloud gezeichnet zu werden?'],
 			'black-list'     	=> ['default' => 'der die das',         'hidden' => false, 'description' => 'Wörter (z.B. Funktionswörter), die beim Zählen ignoriert werden sollen. Die Wörter werden hier mit Leerzeichen getrennt angegeben.'],

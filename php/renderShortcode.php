@@ -3,9 +3,8 @@
 
 final class WPWordCloud {
 
-	private $pluginName = 'word-cloud';
+	private $pluginName = 'wp-word-cloud';
 	private $version = '2.0.0';
-	private $demoData = 'Lorem Ipsum';
 
 	private $error = NULL;
 
@@ -95,23 +94,45 @@ final class WPWordCloud {
 
 		wp_enqueue_style(
 			$this->pluginName, 
-			plugin_dir_url( __DIR__ ) . 'css/word-cloud.css', 
+			plugin_dir_url( __DIR__ ) . 'css/wpWordCloud.css', 
 			array(), 
 			$this->version, 
 			'all' );
 
 		wp_register_script(
-			 'wordcloud-library',
-			 plugin_dir_url( __DIR__ ) . 'js/wordcloud2.js', 
+			 'word-cloud-renderer',
+			 plugin_dir_url( __DIR__ ) . 'lib/wordcloud2.js', 
 			 array( 'jquery' )
 		 );
 
 		wp_enqueue_script(
-			 'word-cloud',
-			 plugin_dir_url( __DIR__ ) . 'js/word-cloud.js',
-			 array( 'wordcloud-library' )                     
+			 'word-cloud-settings',
+			 plugin_dir_url( __DIR__ ) . 'js/getWordCloudSettings.js',
+			 array( 'word-cloud-renderer' )                     
 		);
 
+		wp_enqueue_script(
+			 'word-cloud',
+			 plugin_dir_url( __DIR__ ) . 'js/wpWordCloud.js',
+			 array( 'word-cloud-settings' )                     
+		);
+
+		if ($this->settings['enable-ocr'] == 1) {
+
+			wp_enqueue_script(
+				'tesseract-library',
+				plugin_dir_url( __DIR__ ) . 'lib/tesseract.min.js',
+				array( 'jquery' )                     
+		   );
+   
+		   wp_enqueue_script(
+			'init-ocr',
+			plugin_dir_url( __DIR__ ) . 'js/initOcr.js',
+			array( 'word-cloud' )
+
+	   		);
+
+		}
 	}
 
 	private function countWords($words) {
