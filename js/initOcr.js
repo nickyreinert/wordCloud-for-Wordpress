@@ -77,7 +77,6 @@
                 });
               }
 
-
             })
 
     } 
@@ -272,11 +271,17 @@
 
             $('.ocr-loader-container').hide();
 
+            $(videoCaptureContainer).hide();
+            $(videoCaptureContainer).empty();
+
+            if (window.stream) {
+              window.stream.getTracks().forEach(track => {
+                track.stop();
+              });
+            }
+
           })();
-    
-    
-    
-    
+        
         } else {
           
           $('.ocr-loader-container').hide();
