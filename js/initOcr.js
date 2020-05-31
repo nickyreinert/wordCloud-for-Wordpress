@@ -68,14 +68,9 @@
 
             $('#close-ocr-'+wpWordCloudSettings.id).on('click', function(){
 
-              video = document.getElementById('video-input-'+wpWordCloudSettings.id);
-              
-              video.stop();
-
               $(videoCaptureContainer).hide();
               $(videoCaptureContainer).empty();
-              
-    
+                  
             })
 
     } 
