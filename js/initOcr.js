@@ -91,31 +91,6 @@
         image = document.getElementById('image-output-'+wpWordCloudSettings.id);
         deviceSelector = document.getElementById('device-selector-'+wpWordCloudSettings.id);
 
-        navigator.mediaDevices.enumerateDevices()
-          .then(function(deviceInfos){
-
-            for (let i = 0; i !== deviceInfos.length; ++i) {
-
-              if (deviceInfos[i].kind === 'videoinput') {
-                
-                const option = document.createElement('option');
-                option.value = deviceInfos[i].deviceId;
-                option.text = deviceInfos[i].label || `camera ${deviceSelector.length + 1}`;
-                deviceSelector.appendChild(option);
-
-
-              } 
-            
-            }
-
-          })
-          .catch(function(e){
-
-            console.log('Could not read supported devices: ', e.message, e.name);
-            removeCaptureControls(wpWordCloudSettings);
-
-          });
-
         deviceSelector.addEventListener('change', function(){
 
           if (window.stream) {
@@ -124,10 +99,21 @@
             });
           }
 
-          const constraints = {
-            audio: false,
-            video: {deviceId: this.value ? {exact: this.value} : undefined}
-          };
+          if (this.value === '') {
+
+            constraints = {
+              audio: false,
+              video: {facingMode : 'environment'}
+            };
+    
+          } else {
+            
+            constraints = {
+              audio: false,
+              video: {deviceId : {exact: this.value }}
+            };
+  
+          }
 
           navigator.mediaDevices.getUserMedia(constraints)
           .then(function(stream) {
@@ -147,7 +133,30 @@
 
         });
 
+        navigator.mediaDevices.enumerateDevices()
+          .then(function(deviceInfos){
 
+            for (let i = 0; i !== deviceInfos.length; ++i) {
+
+              if (deviceInfos[i].kind === 'videoinput') {
+                
+                const option = document.createElement('option');
+                option.value = deviceInfos[i].deviceId;
+                option.text = deviceInfos[i].label || `Camera ${deviceSelector.length + 1}`;
+                deviceSelector.appendChild(option);
+
+
+              } 
+            
+            }
+
+          })
+          .catch(function(e){
+
+            console.log('Could not read supported devices: ', e.message, e.name);
+            removeCaptureControls(wpWordCloudSettings);
+
+          });
         // If you get `TypeError: navigator.mediaDevices is undefined`
         // serve your page via HTTPS, otherwise access will be blocked
         navigator.mediaDevices.getUserMedia({video: true, audio: false})
