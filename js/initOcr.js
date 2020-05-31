@@ -53,18 +53,28 @@
             // add camera controls to ui
             // hide on init, otherwise you see this ugly gray box
             // until user confirms camera usage
-            .append('<div style="display: none;" class="ocr-camera-controls">'+
-              '<video id="video-input-'+wpWordCloudSettings.id+'">Video stream not available.</video>'+
+            .append('<div style="display: none;" class="ocr-camera-container">'+
+            '<div class="ocr-hint">'+wpWordCloudSettings.ocrHint+'</div>'+
+            '<div class="ocr-loader-container"><div class="ocr-loader"></div></div>'+
+            '<video id="video-input-'+wpWordCloudSettings.id+'">Video stream not available.</video>'+
               '<canvas id="temp-canvas-'+wpWordCloudSettings.id+'"></canvas>'+
               '<img id="image-output-'+wpWordCloudSettings.id+'" alt="The screen capture will appear in this box. Click the image to re-capture" />'+
-              '<button class="close-ocr" id="close-ocr-'+wpWordCloudSettings.id+'">X</button>'+
+              '<div class="ocr-camera-controls">'+
+                '<button class="close-ocr" id="close-ocr-'+wpWordCloudSettings.id+'">X</button>'+
+                '<select class="device-selector" id="device-selector-'+wpWordCloudSettings.id+'"></select>'+
+              '</div>'+
               '</div>'
             );
 
             $('#close-ocr-'+wpWordCloudSettings.id).on('click', function(){
 
+              video = document.getElementById('video-input-'+wpWordCloudSettings.id);
+              
+              video.stop();
+
               $(videoCaptureContainer).hide();
               $(videoCaptureContainer).empty();
+              
     
             })
 
@@ -77,7 +87,32 @@
         video = document.getElementById('video-input-'+wpWordCloudSettings.id);
         canvas = document.getElementById('temp-canvas-'+wpWordCloudSettings.id);
         image = document.getElementById('image-output-'+wpWordCloudSettings.id);
-    
+        deviceSelector = document.getElementById('device-selector-'+wpWordCloudSettings.id);
+
+        navigator.mediaDevices.enumerateDevices()
+          .then(function(deviceInfos){
+
+            for (let i = 0; i !== deviceInfos.length; ++i) {
+
+              if (deviceInfos[i].kind === 'videoinput') {
+                
+                const option = document.createElement('option');
+                option.value = deviceInfos[i].deviceId;
+                option.text = deviceInfos[i].label || `camera ${deviceSelector.length + 1}`;
+                deviceSelector.appendChild(option);
+
+              } 
+            
+            }
+
+          })
+          .catch(function(e){
+
+            console.log('Could not read supported devices: ', e.message, e.name);
+            removeCaptureControls(wpWordCloudSettings);
+
+          });
+
         // If you get `TypeError: navigator.mediaDevices is undefined`
         // serve your page via HTTPS, otherwise access will be blocked
         navigator.mediaDevices.getUserMedia({video: true, audio: false})
@@ -86,15 +121,18 @@
             video.play();
           })
           .catch(function(e) {
-            console.log("Could not start video stream from your camera: " + e);
+
+            console.log("Could not start video stream from your camera: " + e.message, e.name);
             removeCaptureControls(wpWordCloudSettings);
+
           });
     
           video.addEventListener('canplay', function(ev){
 
             // actually show controls only 
             // if user confirms video stream
-            $(videoCaptureContainer).find('div.ocr-camera-controls').show();
+            $(videoCaptureContainer).find('div.ocr-camera-container').show();
+            $('.ocr-hint').fadeOut(parseInt(wpWordCloudSettings.ocrHintFadeout));
 
             // if not already streaming, init streaming settings
             if (!streaming) {
@@ -116,14 +154,19 @@
             }
         }, false);
     
-        video.addEventListener('click', function(ev){
-          takepicture();
-          ev.preventDefault();
+        video.addEventListener('click', function(event){
+          
+          takepicture(wpWordCloudSettings);
+          
+          event.preventDefault();
+
         }, false);
 
         image.addEventListener('click', function(event){
           
           $(video).show();
+
+          $('.ocr-loader-container').show();
 
         })
     
@@ -150,9 +193,11 @@
       // drawing that to the screen, we can change its size and/or apply
       // other changes before drawing it.
     
-      function takepicture() {
+      function takepicture(wpWordCloudSettings) {
         
         var context = canvas.getContext('2d');
+
+        $('.ocr-loader-container').show();
 
         if (width && height) {
           canvas.width = width;
@@ -180,17 +225,23 @@
             await worker.initialize('eng');
             const { data: { text } } = await worker.recognize(data);
     
-            // document.getElementById('ocr').textContent = text;
-            console.log(text);
+            document.getElementById('word-cloud-text-'+wpWordCloudSettings.id).textContent = text;
     
             await worker.terminate();
+
+            $('.ocr-loader-container').hide();
+
           })();
     
     
     
     
         } else {
+          
+          $('.ocr-loader-container').hide();
+          
           clearImage();
+
         }
 
         

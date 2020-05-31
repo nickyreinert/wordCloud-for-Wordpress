@@ -55,40 +55,97 @@
 
 }
 
-.ocr-camera-controls {
+.ocr-camera-container {
     width: 75%;
+    height: 100%;
     margin: 0 auto;
     position: relative;
 }
-.ocr-camera-controls video,
-.ocr-camera-controls canvas,
-.ocr-camera-controls img {
+.ocr-camera-container video,
+.ocr-camera-container canvas,
+.ocr-camera-container img {
     width: 100%;
     height: auto;
     position: absolute;
     
 }
-.ocr-camera-controls img {
+.ocr-camera-container img {
     z-index: 100;
     cursor: pointer;
 }
-.ocr-camera-controls video {
+.ocr-camera-container video {
     z-index: 200;
     cursor: pointer;
 }
-.ocr-camera-controls canvas {
+.ocr-camera-container canvas {
     z-index: 100;
 }
-.ocr-camera-controls button.close-ocr {
+
+.ocr-camera-controls {
+    width: 100%;
+    position: absolute;
+    z-index: 1000;
+    bottom: 0;
+    height: 2em;
+    background-color: #ffffff;
+}
+.ocr-camera-container button.close-ocr {
+    
     position: absolute;
     z-index: 500;
     background-color: #cd2653 !important;
-    top: 0;
-    width: 5em;
+    bottom: 0;
+    width: 50%;
     right: 0; 
     text-align: center;  
+    height: 100%;
+    line-height: 2em;
+    padding: 0;
 }
 
+.ocr-camera-container select.device-selector {
+
+    position: absolute;
+    z-index: 500;
+    bottom: 0;
+    width: 50%;
+    left: 0; 
+    text-align: center;  
+    height: 100%;
+
+
+}
+
+.ocr-hint {
+    position: absolute;
+    z-index: 1000;
+    width: 100%;
+    background-color: rgba(255,255,255,0.6);
+    top: 33%;
+    text-align: center;
+
+}
+
+.ocr-loader-container {
+    position: absolute;
+    z-index: 1000;
+    left: 50%;
+    top: 50%;
+    display: none;
+}
+.ocr-loader {
+    border: 16px solid #f3f3f3; /* Light grey */
+    border-top: 16px solid #cd2653; /* Blue */
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    animation: spin 2s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  } 
 
 .word-cloud-container textarea {
     width: 80%;
