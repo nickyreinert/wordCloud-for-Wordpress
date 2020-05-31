@@ -96,9 +96,9 @@
           if (window.stream) {
             window.stream.getTracks().forEach(track => {
               track.stop();
+              console.log('stopping stream');
             });
           }
-
           if (this.value === '') {
 
             constraints = {
@@ -117,11 +117,11 @@
 
           navigator.mediaDevices.getUserMedia({video: true, audio: false})
           .then(function(stream) {
-            // video.srcObject = stream;
-            // video.play();
             window.stream = stream; // make stream available to console
             video.srcObject = stream;
             video.play();
+            // video.srcObject = stream;
+            // video.play();
           })
           .catch(function(e) {
 
@@ -161,6 +161,7 @@
         // serve your page via HTTPS, otherwise access will be blocked
         navigator.mediaDevices.getUserMedia({video: true, audio: false})
           .then(function(stream) {
+            window.stream = stream; // make stream available to console
             video.srcObject = stream;
             video.play();
           })
