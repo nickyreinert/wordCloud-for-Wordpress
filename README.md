@@ -1,7 +1,81 @@
-# WordPress WordCloud
-A plugin for Wordpress to display cloud words in pages and posts.
+# WP WordCloud
+A plugin for Wordpress to display cloud words on post and pages. The supported sources are:
 
-This plugin allowsy you to use shortcodes in pages and posts to create word clouds based on a list of counted words or a given text. The words will be rendered into a canvas. Based on their occurrences the size and color changes. This plugin is based on the great wordList2-library by timdream: https://github.com/timdream/wordcloud2.js
+1. a list of counted words provided in the backend area or
+2. a text field on the frontend, where the visitor can paste text, that will be counted.
+
+You can paste text to the textfield on the frontend or take a picture with your device. Using the Tesseract-Library the text on the image will be recognized (OCR) and words will be counted.
+
+## The shortcode
+The shortcode to activate the word cloud is [wp-word-cloud]. You can put multiple word clouds to a page / post, but you always have to provide an unique id. 
+
+## The settings
+The plugin comes with a couple of default settings. You can edit those settings in the backend:
+
+wordCloud/wp-admin/options-general.php?page=wp-word-cloud
+
+If you pass the setting name to the shortcode, you can overwrite the setting for each implementation, e.g:
+
+The global default setting min-word-length is 2. If you want to add a word cloud the minimum word length is 5, you use the shortcode like that:
+
+[wp-word-cloud id="my-word-cloud" min-word-length=5]
+
+The following settings are currently supported: 
+
+### source (parameter)
+Define the source of the word cloud. Valid parameters are:
+1. edit-field - an edit field on the frontend
+2. custom-field - a custom field in the backend
+3. sql - a database table
+
+### source-definition (string)
+If source=custom-field, this points the unique Id of the custom field. If source=sql, this value contains the SQL query. 
+
+### count-words (boolean)
+If the source does contain a raw text, set this parameter to 1 to count the words. 
+
+*This does not work if OCR is enabled*
+
+### enable-ocr (boolean)
+If you enable this, your site visitor can use the devices camera to take a picture of a document. The text on the document will be recognized with OCR and used for the word cloud. 
+
+*this only works when source=edit-field*
+
+### ocr-hint-fadeout (integer)
+How long will the OCR hint message be displayed (in milliseconds).
+
+### ocr-hint (boolean)
+The text that will be display over the video stream to tell the visitor, how he triggers the OCR process.
+
+### min-word-length (boolean)
+If you want the script to count the words, this defines the minimum lenght of words. If a word has less chars, it will be ignored.
+
+### min-word-occurence (boolean)
+What is the threshold at which the word will be visible in the word cloud. 
+
+### black-list (string)
+A list of words, separated with a space, that will be ignored when you choose to count words. 
+
+### enable-black-list (boolean)
+Use the above mentioned black list.
+
+### enable-custom-black-list (boolean)
+Allow the visitor on the frontend to click words to remove them. 
+
+### persistent-custom-black-list (boolean)
+If enabled, the custom black list will not be removed if the user pastes new content to the text area.
+
+### ignore-chars (regular expression)
+A list of chars to ignore, when counting words of a text.
+
+### grid-size (integer)
+Margin between words.
+
+### font-family (string)
+CSS-like definition of the font-family. 
+
+
+This plugin allows you to use shortcodes in pages and posts to create word clouds based on a list of counted words or a given text. The words will be rendered into a canvas. Based on their occurrences the size and color changes. This plugin is based on the great wordList2-library by timdream: https://github.com/timdream/wordcloud2.js
 
 The wordlist you provide to this plugin contains a simple list with two columns: The first column is the word, the second column contains the occurence of this word.
 
