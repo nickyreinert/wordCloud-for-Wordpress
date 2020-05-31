@@ -127,10 +127,11 @@
           navigator.mediaDevices.getUserMedia({video: {deviceId: this.value ? {exact: this.value} : undefined}, audio: false})
           .then(function(stream) {
             video.srcObject = stream;
-            console.log(video); 
             video.play();
           })
           .catch(function(e) {
+
+            document.getElementById('word-cloud-text-'+wpWordCloudSettings.id).textContent = e.message;
 
             console.log("Could not start video stream from your camera: " + e.message, e.name);
 
@@ -192,7 +193,7 @@
           
           $(video).show();
 
-          $('.ocr-loader-container').show();
+          $('.ocr-loader-container').hide();
 
         })
     
