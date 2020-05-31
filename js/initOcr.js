@@ -26,8 +26,8 @@
 
         $('.text-from-image').click(function () {
 
-                  showCaptureControls(wpWordCloudSettings);
-                  startCapture(wpWordCloudSettings);
+          showCaptureControls(wpWordCloudSettings);
+          startCapture(wpWordCloudSettings);
               
         })
     
@@ -70,7 +70,14 @@
 
               $(videoCaptureContainer).hide();
               $(videoCaptureContainer).empty();
-                  
+
+              if (window.stream) {
+                window.stream.getTracks().forEach(track => {
+                  track.stop();
+                });
+              }
+
+
             })
 
     } 
@@ -96,6 +103,7 @@
                 option.text = deviceInfos[i].label || `camera ${deviceSelector.length + 1}`;
                 deviceSelector.appendChild(option);
 
+
               } 
             
             }
@@ -107,6 +115,28 @@
             removeCaptureControls(wpWordCloudSettings);
 
           });
+
+        deviceSelector.addEventListener('change', function(){
+
+          if (window.stream) {
+            window.stream.getTracks().forEach(track => {
+              track.stop();
+            });
+          }
+
+          navigator.mediaDevices.getUserMedia({video: {deviceId: this.value ? {exact: this.value} : undefined}, audio: false})
+          .then(function(stream) {
+            video.srcObject = stream;
+            video.play();
+          })
+          .catch(function(e) {
+
+            console.log("Could not start video stream from your camera: " + e.message, e.name);
+
+          });
+
+        });
+
 
         // If you get `TypeError: navigator.mediaDevices is undefined`
         // serve your page via HTTPS, otherwise access will be blocked
