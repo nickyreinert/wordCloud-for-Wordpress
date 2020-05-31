@@ -124,8 +124,16 @@
             });
           }
 
-          navigator.mediaDevices.getUserMedia({video: {deviceId: this.value ? {exact: this.value} : undefined}, audio: false})
+          const constraints = {
+            audio: false,
+            video: {deviceId: this.value ? {exact: this.value} : undefined}
+          };
+
+          navigator.mediaDevices.getUserMedia(constraints)
           .then(function(stream) {
+            // video.srcObject = stream;
+            // video.play();
+            window.stream = stream; // make stream available to console
             video.srcObject = stream;
             video.play();
           })
