@@ -120,12 +120,8 @@
             window.stream = stream; // make stream available to console
             video.srcObject = stream;
             video.play();
-            // video.srcObject = stream;
-            // video.play();
           })
           .catch(function(e) {
-
-            document.getElementById('word-cloud-text-'+wpWordCloudSettings.id).textContent = e.message;
 
             console.log("Could not start video stream from your camera: " + e.message, e.name);
 
