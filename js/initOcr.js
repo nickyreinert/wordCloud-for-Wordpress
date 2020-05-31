@@ -61,7 +61,7 @@
               '<img id="image-output-'+wpWordCloudSettings.id+'" alt="The screen capture will appear in this box. Click the image to re-capture" />'+
               '<div class="ocr-camera-controls">'+
                 '<button class="close-ocr" id="close-ocr-'+wpWordCloudSettings.id+'">X</button>'+
-                '<select class="device-selector" id="device-selector-'+wpWordCloudSettings.id+'"><option value="foo">Foobar</option></select>'+
+                '<select class="device-selector" id="device-selector-'+wpWordCloudSettings.id+'"></select>'+
               '</div>'+
               '</div>'
             );
@@ -115,7 +115,7 @@
   
           }
 
-          navigator.mediaDevices.getUserMedia({video: true, audio: false})
+          navigator.mediaDevices.getUserMedia(constraints)
           .then(function(stream) {
             window.stream = stream; // make stream available to console
             video.srcObject = stream;
