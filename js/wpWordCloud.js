@@ -6,9 +6,9 @@
 	// to receive word cloud settings 
 	$(".word-cloud-container").each(function () {
 
-		console.log(this);
-
 		var wpWordCloudSettings = getWordCloudSettings(this);
+
+		console.log(wpWordCloudSettings);
 
 		// add canvas
 		$(this).append('<div class="word-cloud-controller"></div>');
@@ -26,27 +26,36 @@
 		// hiden on init
 		$(this).append('<div class="word-cloud-tooltip" id="word-cloud-tooltip-'+wpWordCloudSettings.id+'"></div>');
 
-		if (wpWordCloudSettings.source == 'edit-field') {
+		if (wpWordCloudSettings.countWords == 1) {
 
-				$(this).find('.word-cloud-controller').prepend('<button class="render-word-cloud" id="render-word-cloud-'+wpWordCloudSettings.id+'">Erstellen</button>');
+			wpWordCloudSettings.list = countWords(wpWordCloudSettings);
 
-				$(this).prepend('<textarea class="word-cloud-text" id="word-cloud-text-'+wpWordCloudSettings.id+'"></textarea>');
+		} else {
 
-			if (wpWordCloudSettings.useDemoText == 1) {
-
-				$('#word-cloud-text-'+wpWordCloudSettings.id).text(wpWordCloudSettings.text);
-
-				wpWordCloudSettings.list = countWords(wpWordCloudSettings);
-
-				wpWordCloudSettings.maxWeight = getMaxWeight(wpWordCloudSettings);
-		
-				wpWordCloudSettings = setWcCallbacks(wpWordCloudSettings);
-		
-				WordCloud($('#word-cloud-' + wpWordCloudSettings.id)[0], wpWordCloudSettings);
-		
-			}
+			wpWordCloudSettings.list = wpWordCloudSettings.data;
 
 		}
+
+		if (wpWordCloudSettings.enableFrontendEdit == 1) {
+
+			$(this).find('.word-cloud-controller').prepend('<button class="render-word-cloud" id="render-word-cloud-'+wpWordCloudSettings.id+'">Erstellen</button>');
+
+			$(this).prepend('<textarea class="word-cloud-text" id="word-cloud-text-'+wpWordCloudSettings.id+'"></textarea>');
+
+			$('#word-cloud-text-'+wpWordCloudSettings.id).text(wpWordCloudSettings.text);
+
+		} else {
+
+			wpWordCloudSettings.text = '';
+
+		}
+
+		wpWordCloudSettings.maxWeight = getMaxWeight(wpWordCloudSettings);
+
+		wpWordCloudSettings = setWcCallbacks(wpWordCloudSettings);
+
+
+		WordCloud($('#word-cloud-' + wpWordCloudSettings.id)[0], wpWordCloudSettings);
 
 	});
 

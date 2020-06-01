@@ -135,82 +135,109 @@ final class WPWordCloud {
 		}
 	}
 
-	private function countWords($words) {
+	private function countWords($text) {
 
-		return $words;
+		$list = [];
+		
+		$textArray = explode(' ', preg_replace('/\r|\n/', '', $text));
 
-	}
+		$blackList = explode(' ', $this->settings['black-list']);
 
-	private function getDataFromSource() {
+		foreach ($textArray as $word) {
 
-		// if user wants to use demo text
-		// move demo text to actual text property
+			$cleanWord = preg_replace('/'.$this->settings['ignore-chars'].'/', '', $word);
 
-		if ($this->settings['use-demo-text'] == TRUE) {
+			if ($this->settings['text-transform'] == 'uppercase') {
 
-			if ($this->settings['count-words'] == TRUE) {
+				$cleanWord = strtoupper($cleanWord);
 
-				$this->settings['words'] = $this->countWords($this->settings['demo-text']);
+			} else if ($this->settings['text-transform'] == 'lowercase') {
 
-			} else {
-
-				$this->settings['text'] = $this->settings['demo-text'];
-
+				$cleanWord = strtolower($cleanWord);
+				
 			}
 
-			// save space
-			$this->settings['demo-text'] = NULL;
+			if (!isset($blackList[$cleanWord])) {
 
-		// otherwise get text from given source
-		} else {
+				if (strlen($cleanWord) >= $this->settings['min-word-length']) {
 
-			switch ($this->settings['source']) {
+					if (!isset($list[$cleanWord])) {
 
-				case 'edit-field':
-					// get text from text field on frontend
-					// only listing this for further reference
-					// nothing to do here
-					break;
-	
-				case 'custom-field':
-					// get text from custom field on page / post
-					$customFieldId = $this->settings['source-definition'];
-	
-					$customFieldContent = get_post_meta(get_the_ID(), $customFieldId, TRUE);
-
-					if ($this->settings['count-words'] == 1) {
-
-						$this->settings['words'] = $this->countWords($customFieldContent);
+						$list[$cleanWord] = 1;
 
 					} else {
 
-						$this->settings['words'] = $customFieldContent;
+						$list[$cleanWord]++;
 
 					}
 
-					break;
-					
-				case 'sql':
+				}
 
-					// get text from data base using sql 
-					global $wpdb;
-	
-					$wpdb->show_errors(); 
-	
-					$sql = $wpdb->prepare($this->settings['query']);
-					
-					$data = $wpdb->get_results($sql);
-
-					foreach ($data as $row) {
-							
-						$wordList[] = [$row->word, $row->count];
-	
-					}
-		
-					break;
 			}
+		}
+
+		return $list;
+
+	}
+
+	private function getDataFromSource($source) {
+
+		switch ($this->settings['source-type']) {
+
+			case 'custom-field':
+
+				$this->settings['text'] = get_post_meta(get_the_ID(), $source, TRUE);
+
+				break;
+				
+			case 'sql':
+
+				// get text from data base using sql 
+				global $wpdb;
+
+				$wpdb->show_errors(); 
+
+				$sql = $wpdb->prepare($source);
+				
+				$data = $wpdb->get_results($sql);
+
+				foreach ($data as $row) {
+						
+					$wordList[] = [$row->word, $row->count];
+
+				}
+
+				$this->settings['data'] = $wordList;
+	
+				break;
+
+			case 'url':
+
+				$request = wp_remote_get($source);
+				
+				$this->settings['text'] = wp_remote_retrieve_body($request);
+
+				break;
+
+			case 'inline':
+			default:
+
+				$this->settings['text'] = $source;
+
+				break;
 
 		}
+
+		// if text already contains counted word list,
+		// pass it to list array
+		// otherwise text will be counted on frontend side
+		if ($this->settings['count-words'] != 1) {
+
+			$this->settings['list'] = $this->settings['text'];
+
+			$this->settings['text'] = NULL;
+
+		} 
 
 	}
 
@@ -220,7 +247,7 @@ final class WPWordCloud {
 
 		$this->enqueueDepencies();
 
-		$this->getDataFromSource();
+		$this->getDataFromSource($content);
 
 		if ($this->error != NULL) {
 

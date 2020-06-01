@@ -12,8 +12,14 @@ function getWordCloudSettings(element) {
 
     var processedSettings = {};
     
-    // original library settings (required)
-    processedSettings.list 				= settings['list'];
+    // get array from object
+    if (settings['list'] != null) {
+
+        processedSettings.list = Object.keys(settings['list']).map(function(key) {
+            return [Number(key), settings['list'][key]];
+          });
+    
+    }
     processedSettings.backgroundColor 	= settings['background-color'];
     processedSettings.gridSize 			= settings['grid-size'];
     processedSettings.fontFamily 		= settings['font-family'];
@@ -30,13 +36,12 @@ function getWordCloudSettings(element) {
     // own settings
     processedSettings.id 				= settings['id'];
     processedSettings.source 			= settings['source'];
+    processedSettings.text 		    	= settings['text'];
+    processedSettings.enableFrontendEdit = settings['enable-frontend-edit'];
     processedSettings.canvasWidth 		= settings['canvas-width'];
     processedSettings.canvasHeight 		= settings['canvas-height'];
     processedSettings.minAlpha 			= settings['min-alpha'];
     
-    processedSettings.text 				= settings['text'];
-    processedSettings.useDemoText 		= settings['use-demo-text'];
-    processedSettings.demoText 			= settings['demo-text'];
     processedSettings.textTransform 	= settings['text-transform'];
 
     processedSettings.countWords 		= settings['count-words'];
@@ -64,9 +69,9 @@ function getWordCloudSettings(element) {
     
     processedSettings.sizeFactor 		= parseInt(settings['size-factor']);
 
-    processedSettings.enableOcr 	= settings['enable-ocr'];
-    processedSettings.ocrHintFadeout 	= settings['ocr-hint-fadeout'];
-    processedSettings.ocrHint 	= settings['ocr-hint'];
+    processedSettings.enableOcr 	    = settings['enable-ocr'];
+    processedSettings.ocrHintFadeout    = settings['ocr-hint-fadeout'];
+    processedSettings.ocrHint 	        = settings['ocr-hint'];
 
     return processedSettings;
 }

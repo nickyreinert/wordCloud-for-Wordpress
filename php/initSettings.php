@@ -12,9 +12,9 @@
     function wp_word_cloud_get_global_settings() {
 
         return [
-			'source'			=> ['default' => 'edit-field',          'hidden' => false, 'description' => 'Woher kommt die Liste gezählter Wörter? Möglich sind edit-field, sql und custom-field'],
-			'source-definition'	=> ['default' => NULL,                  'hidden' => false, 'description' => 'Enthält je nach Quelle entweder eine SQL-Abfrage den Namen eines custom fields.'],
+			'source-type'		=> ['default' => 'inline',              'valid' => ['inline', 'url', 'sql', 'custom-field'], 'hidden' => false, 'description' => 'Woher kommt die Liste gezählter Wörter? Möglich sind url, inline, sql und custom-field'],
 			'count-words'	    => ['default' => 0,                     'hidden' => false, 'description' => 'Enthält die Quelle Text und müssen die Wörter erst gezählt werden?'],
+            'enable-frontend-edit' => ['default' => 0,                  'hidden' => false, 'description' => 'Zeigt im Frontend ein Textfeld an, damit der Besucher die WordCloud selber bearbeiten kann.'],
 			'enable-ocr'        => ['default' => 0,                     'hidden' => false, 'description' => 'Ermögliche das Hinzufügen von Texten direkt von der Kamera des Gerätes.'],
 			'ocr-hint-fadeout'  => ['default' => 5000,                  'hidden' => false, 'description' => 'Wie lange soll der Hinweis-Text angezeigt werden, bevor er ausgeblendet wird (in Millisekunden)?'],
             'ocr-hint'          => ['default' => 'Klicke auf das Video, um ein Bild für OCR aufzunehmen. Drücke erneut, um die Aufnahme neu zu starten.',                  
@@ -33,19 +33,19 @@
 			'font-weight'		=> ['default' => 'bold',                'hidden' => false, 'description' => NULL],
 			'min-rotation'		=> ['default' => 0,                     'hidden' => false, 'description' => NULL],
 			'max-rotation'		=> ['default' => 0,                     'hidden' => false, 'description' => NULL],
-			'size-factor'		=> ['default' => 40,                    'hidden' => false, 'description' => NULL],
+			'size-factor'		=> ['default' => 20,                    'hidden' => false, 'description' => NULL],
 			'shape'				=> ['default' => 'circle',              'hidden' => false, 'description' => NULL],
 			'draw-out-of-bound'	=> ['default' => 1,                     'hidden' => false, 'description' => NULL],
 			'shuffle'			=> ['default' => 1,                     'hidden' => false, 'description' => NULL],
 			'canvas-width'		=> ['default' => '1024px',              'hidden' => false, 'description' => NULL],
 			'canvas-height'		=> ['default' => '800px',               'hidden' => false, 'description' => NULL],
 			'ellipticity'		=> ['default' => 1,                     'hidden' => false, 'description' => NULL],
-			'use-demo-text'		=> ['default' => 1,                     'hidden' => false, 'description' => NULL],
-			'demo-text'		    => ['default' => 'Lorem Ipsum ',        'hidden' => false, 'description' => NULL],
 			'text-transform'	=> ['default' => 'uppercase',           'hidden' => false, 'description' => NULL],
 			'clear-canvas'		=> ['default' => 1,                     'hidden' => false, 'description' => NULL],
 			'min-alpha'			=> ['default' => 0.1,                   'hidden' => false, 'description' => NULL],
-			'id'				=> ['default' => "1",                   'hidden' => true, 'description' => 'Id die für die Word Cloud verwendet wird. Muss auf Seitenebene eindeutig sein.']
+			'id'				=> ['default' => "1",                   'hidden' => true, 'description' => 'Id die für die Word Cloud verwendet wird. Muss auf Seitenebene eindeutig sein.'],
+			'list'				=> ['default' => [],                     'hidden' => true, 'description' => 'Enthält die Liste gezählter Wörter.'],
+			'text'				=> ['default' => NULL,                   'hidden' => true, 'description' => 'Text oder gezählte Wörter.']
         ];
         
     }
@@ -74,7 +74,10 @@
             ?>
               <div>
               <?php screen_icon(); ?>
-              <h2>Wordpress Word-Cloud</h2>
+              <h2>WP Word-Cloud</h2>
+              <p>Hier kannst du die Standardeinstellungen anpassen. Die Standard-Einstellungen können überschrieben werden, wenn du den Parameter direkt im Shortcode übergibst.
+                  Zum Beispiel: [wp-word-cloud source-type="url"][/wp-word-cloud] 
+              </p>
               <form method="post" action="options.php">
               <?php settings_fields( 'wp_word_cloud_settings' ); ?>
               <h3>Einstellungen</h3>
@@ -84,10 +87,25 @@
 
                         if ($value['hidden'] === FALSE) {
 
-                            echo '<tr valign="top"><th scope="row">';
+                            echo '<tr valign="top"><td scope="row">';
                                 echo '<label for="'.$name.'">'.$name.'</label>';
-                            echo '</th><td>';
+                            echo '</td><td>';
+                            if (isset($value['valid'])) {
+
+                                echo '<select size=1>';
+                                foreach ($value['valid'] as $key => $option) {
+                                    
+                                    echo '<option value="'.$option.'">'.selected(get_option($name), $option).'</option>';
+
+                                }
+                                echo '<(select>';
+
+                            } else {
+
                                 echo '<input type="text" id="'.$name.'" name="'.$name.'" value="'.get_option($name).'"';
+                            
+                            }
+
                             echo '</td><td>';
                                 echo $value['description'];
                             echo '</td></tr>';
