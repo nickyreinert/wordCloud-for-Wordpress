@@ -75,6 +75,7 @@
 
 		wpWordCloudSettings.list = countWords(wpWordCloudSettings);
 
+		console.log(wpWordCloudSettings.list);
 		wpWordCloudSettings.maxWeight = getMaxWeight(wpWordCloudSettings);
 		
 		wpWordCloudSettings = setWcCallbacks(wpWordCloudSettings);

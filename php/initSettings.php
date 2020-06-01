@@ -13,39 +13,43 @@
 
         return [
 			'source-type'		=> ['default' => 'inline',              'valid' => ['inline', 'url', 'sql', 'custom-field'], 'hidden' => false, 'description' => 'Woher kommt die Liste gezählter Wörter? Möglich sind url, inline, sql und custom-field'],
-			'count-words'	    => ['default' => 0,                     'hidden' => false, 'description' => 'Enthält die Quelle Text und müssen die Wörter erst gezählt werden?'],
-            'enable-frontend-edit' => ['default' => 0,                  'hidden' => false, 'description' => 'Zeigt im Frontend ein Textfeld an, damit der Besucher die WordCloud selber bearbeiten kann.'],
-			'enable-ocr'        => ['default' => 0,                     'hidden' => false, 'description' => 'Ermögliche das Hinzufügen von Texten direkt von der Kamera des Gerätes.'],
+			'count-words'	    => ['default' => false,                 'valid' => 'bool',   'hidden' => false, 'description' => 'Enthält die Quelle Text und müssen die Wörter erst gezählt werden?'],
+            'enable-frontend-edit' => ['default' => 0,                  'valid' => 'bool','hidden' => false, 'description' => 'Zeigt im Frontend ein Textfeld an, damit der Besucher die WordCloud selber bearbeiten kann.'],
+			'enable-ocr'        => ['default' => 0,                     'valid' => 'bool','hidden' => false, 'description' => 'Ermögliche das Hinzufügen von Texten direkt von der Kamera des Gerätes.'],
 			'ocr-hint-fadeout'  => ['default' => 5000,                  'hidden' => false, 'description' => 'Wie lange soll der Hinweis-Text angezeigt werden, bevor er ausgeblendet wird (in Millisekunden)?'],
             'ocr-hint'          => ['default' => 'Klicke auf das Video, um ein Bild für OCR aufzunehmen. Drücke erneut, um die Aufnahme neu zu starten.',                  
-                'hidden' => false, 'description' => 'Hinweistext, der beim Aktivieren der OCR Funktion angezeigt wird.'],
+                'valid' => 'text', 'hidden' => false, 'description' => 'Hinweistext, der beim Aktivieren der OCR Funktion angezeigt wird.'],
 			'min-word-length'	=> ['default' => 2,                     'hidden' => false, 'description' => 'Wie lange muss ein Wort mindestens sein, um gezählt zu werden?'],
 			'min-word-occurence'=> ['default' => 2,                     'hidden' => false, 'description' => 'Wie oft muss ein Wort mindestens vorkommen, um in der Word Cloud gezeichnet zu werden?'],
 			'black-list'     	=> ['default' => 'der die das',         'hidden' => false, 'description' => 'Wörter (z.B. Funktionswörter), die beim Zählen ignoriert werden sollen. Die Wörter werden hier mit Leerzeichen getrennt angegeben.'],
-			'enable-black-list'	=> ['default' => 1,                     'hidden' => false, 'description' => 'Nutze die Blacklist.'],
-			'enable-custom-black-list'	=> ['default' => 1,              'hidden' => false, 'description' => 'Soll der Nutzer Wörter per Klick aus der Wortcloud entfernen können?'],
-			'persistent-custom-black-list'	=> ['default' => 1,         'hidden' => false, 'description' => 'Bleibt die benutzerdefinierte Blacklist erhalten, wenn der Nutzer einen neuen Text hinzufügt?'],
+			'enable-black-list'	=> ['default' => 1,                     'valid' => 'bool','hidden' => false, 'description' => 'Nutze die Blacklist.'],
+			'enable-custom-black-list'	=> ['default' => 1,             'valid' => 'bool', 'hidden' => false, 'description' => 'Soll der Nutzer Wörter per Klick aus der Wortcloud entfernen können?'],
+			'persistent-custom-black-list'	=> ['default' => 1,         'valid' => 'bool','hidden' => false, 'description' => 'Bleibt die benutzerdefinierte Blacklist erhalten, wenn der Nutzer einen neuen Text hinzufügt?'],
 			'ignore-chars'		=> ['default' => '\(\)\[\]\,\.;',       'hidden' => false, 'description' => 'Regulärer Ausdruck um bestimmte Zeichen beim Zählen von Wörtern zu ignorieren.'],
-			'background-color'	=> ['default' => 'rgba(255,255,255,0)', 'hidden' => false, 'description' => NULL],
-			'grid-size'			=> ['default' => 1,                     'hidden' => false, 'description' => NULL],
-			'font-family'		=> ['default' => 'Arial, sans-serif',   'hidden' => false, 'description' => NULL],
-			'min-size'			=> ['default' => 1,                     'hidden' => false, 'description' => NULL],
-			'font-weight'		=> ['default' => 'bold',                'hidden' => false, 'description' => NULL],
-			'min-rotation'		=> ['default' => 0,                     'hidden' => false, 'description' => NULL],
-			'max-rotation'		=> ['default' => 0,                     'hidden' => false, 'description' => NULL],
-			'size-factor'		=> ['default' => 20,                    'hidden' => false, 'description' => NULL],
-			'shape'				=> ['default' => 'circle',              'hidden' => false, 'description' => NULL],
-			'draw-out-of-bound'	=> ['default' => 1,                     'hidden' => false, 'description' => NULL],
-			'shuffle'			=> ['default' => 1,                     'hidden' => false, 'description' => NULL],
-			'canvas-width'		=> ['default' => '1024px',              'hidden' => false, 'description' => NULL],
-			'canvas-height'		=> ['default' => '800px',               'hidden' => false, 'description' => NULL],
-			'ellipticity'		=> ['default' => 1,                     'hidden' => false, 'description' => NULL],
-			'text-transform'	=> ['default' => 'uppercase',           'hidden' => false, 'description' => NULL],
-			'clear-canvas'		=> ['default' => 1,                     'hidden' => false, 'description' => NULL],
-			'min-alpha'			=> ['default' => 0.1,                   'hidden' => false, 'description' => NULL],
-			'id'				=> ['default' => "1",                   'hidden' => true, 'description' => 'Id die für die Word Cloud verwendet wird. Muss auf Seitenebene eindeutig sein.'],
-			'list'				=> ['default' => [],                     'hidden' => true, 'description' => 'Enthält die Liste gezählter Wörter.'],
-			'text'				=> ['default' => NULL,                   'hidden' => true, 'description' => 'Text oder gezählte Wörter.']
+			'text-transform'	=> ['default' => 'uppercase',           'valid' => ['uppercase', 'lowercase', 'none'], 'hidden' => false, 'description' => 'Sollen alle Wörter groß- oder kleingeschrieben werden?'],
+			
+            'min-alpha'			=> ['default' => 0.1,                   'hidden' => false, 'description' => 'Der Mindestwert für die Transparenz der Wörter. Setze den Wert auf 1 für gar keine Transparenz.'],
+            'size-factor'		=> ['default' => 20,                    'hidden' => false, 'description' => 'Mit diesem Wert kannst du die Größe der Wörter beeinflussen. Je kleiner der Wert, desto größer die Wörter in der WordCloud.'],
+
+            'canvas-width'		=> ['default' => '1024px',              'hidden' => false, 'description' => 'Lege die Breite des Canvas fest.'],
+			'canvas-height'		=> ['default' => '800px',               'hidden' => false, 'description' => 'Lege die Höhe des Canvas fest.'],
+
+            'background-color'	=> ['default' => 'rgba(255,255,255,0)', 'hidden' => false, 'description' => 'Der Hintergrund des Canvas. Nutze entweder die rgba() oder Hex-Angabe.'],
+            'grid-size'			=> ['default' => 1,                     'hidden' => false, 'description' => 'Hiermit kannst du die Abstände zwischen den Wörtern erhöhen.'],
+			'font-family'		=> ['default' => 'Arial, sans-serif',   'hidden' => false, 'description' => 'Die CSS-Angabe für die verwendete Schriftart.'],
+			'min-size'			=> ['default' => 1,                     'hidden' => false, 'description' => 'Wie groß muss ein Wort sein, um in der WordCloud angezeigt zu werden?'],
+			'font-weight'		=> ['default' => 'bold',                'hidden' => false, 'description' => 'Das Gewicht der Wörter (bold, normal oder z.B. als Ziffer: 100)'],
+			'min-rotation'		=> ['default' => 0,                     'hidden' => false, 'description' => 'Um wieviel Grad sollen die Wörter mindestens gedreht werden?'],
+			'max-rotation'		=> ['default' => 0,                     'hidden' => false, 'description' => 'Um wieviel Grad sollen die Wörter höchstens gedreht werden?'],
+			'shape'				=> ['default' => 'circle',              'valid' => ['circle', 'cardioid', 'diamond', 'triangle', 'pentagon', 'star', 'square', 'triangle-forward'], 'hidden' => false, 'description' => 'Welche Form soll die WordCloud haben?'],
+			'draw-out-of-bound'	=> ['default' => 1,                     'valid' => 'bool','hidden' => false, 'description' => 'Sollen auch Wörter dargestellt werden, die nicht mehr auf die Zeichenfläche passen?'],
+			'shuffle'			=> ['default' => 1,                     'valid' => 'bool','hidden' => false, 'description' => 'Soll die Position der Wörter bei jedem Durchlauf neu durchgemischt werden?'],
+			'ellipticity'		=> ['default' => 1,                     'hidden' => false, 'description' => 'Wie elliptisch soll die WordCloud sein (0 - flach, 1 - kreisförmig)'],
+			'clear-canvas'		=> ['default' => 1,                     'valid' => 'bool','hidden' => false, 'description' => 'Soll die Zeichenfläche vor jedem Durchlauf neu gezeichnet werden?'],
+			
+            'id'				=> ['default' => "1",                   'hidden' => true, 'description' => 'Id die für die Word Cloud verwendet wird. Muss auf Seitenebene eindeutig sein.'],
+			'list'				=> ['default' => [],                    'hidden' => true, 'description' => 'Enthält die Liste gezählter Wörter.'],
+			'text'				=> ['default' => NULL,                  'hidden' => true, 'description' => 'Text oder gezählte Wörter.']
         ];
         
     }
@@ -84,21 +88,33 @@
               <table>
               <?php
                     foreach (wp_word_cloud_get_global_settings() as $name => $value) {
+                        echo '<tr><td>'.is_bool(get_option($name)).'</td></tr>';
 
                         if ($value['hidden'] === FALSE) {
 
                             echo '<tr valign="top"><td scope="row">';
                                 echo '<label for="'.$name.'">'.$name.'</label>';
                             echo '</td><td>';
-                            if (isset($value['valid'])) {
 
-                                echo '<select size=1>';
+                            // add select input if it's a limited option
+                            if (is_array($value['valid'])) {
+
+                                echo '<select name="'.$name.'" size=1>';
                                 foreach ($value['valid'] as $key => $option) {
                                     
-                                    echo '<option value="'.$option.'">'.selected(get_option($name), $option).'</option>';
+                                    echo '<option value="'.$option.'" '.selected(get_option($name), $option).'>'.$option.'</option>';
 
                                 }
-                                echo '<(select>';
+                                echo '</select>';
+
+                            // add checkbox if it is a true/false option
+                            } else if ($value['valid'] == 'text') {
+
+                                echo '<textarea id="'.$name.'" name="'.$name.'">'.get_option($name).'</textarea>';
+
+                            } else if ($value['valid'] == 'bool') {
+
+                                echo '<input type="checkbox" id="'.$name.'" value=1 name="'.$name.'" '.checked(1, get_option($name), false).'>';
 
                             } else {
 
@@ -107,7 +123,7 @@
                             }
 
                             echo '</td><td>';
-                                echo $value['description'];
+                            echo $value['description'];
                             echo '</td></tr>';
 
                         }  
