@@ -83,9 +83,11 @@
             // add camera controls to ui
             // hide on init, otherwise you see this ugly gray box
             // until user confirms camera usage
-            .append('<div style="display: none;" class="ocr-camera-container">'+
-            '<div class="ocr-hint">'+wpWordCloudSettings.ocrHint+'</div>'+
+            .append(
             '<div class="ocr-loader-container"><div class="ocr-loader"></div></div>'+
+            '<div style="display: none;" class="ocr-camera-container">'+
+            '<div class="ocr-hint">'+wpWordCloudSettings.ocrHint+'</div>'+
+            
             '<video id="video-input-'+wpWordCloudSettings.id+'">Video stream not available.</video>'+
               '<canvas id="temp-canvas-'+wpWordCloudSettings.id+'"></canvas>'+
               '<img id="image-output-'+wpWordCloudSettings.id+'" alt="The screen capture will appear in this box. Click the image to re-capture" />'+
@@ -307,9 +309,8 @@
 
   function takePictureMobile(file, wpWordCloudSettings) {
 
-    document.getElementById('word-cloud-text-'+wpWordCloudSettings.id).textContent = "lets go";
-
     var reader = new FileReader();
+    
     reader.onload = function (e) {
       var data = e.target.result;
 
@@ -324,41 +325,43 @@
 
   function ocrText(data, wpWordCloudSettings) {
 
-          // now, as we have the document as an image,
-          // pass it to tesseract and ocr' it
-          const { createWorker } = Tesseract;
-    
-          const worker = createWorker({
-            workerPath: 'https://unpkg.com/tesseract.js@v2.0.0/dist/worker.min.js',
-            langPath: 'https://tessdata.projectnaptha.com/4.0.0',
-            corePath: 'https://unpkg.com/tesseract.js-core@v2.0.0/tesseract-core.wasm.js',
-            logger: m => console.log(m),
-          });
+    var videoCaptureContainer =  $('#text-from-image-container-'+wpWordCloudSettings.id);
 
-          $('.ocr-loader-container').show();
+    // now, as we have the document as an image,
+    // pass it to tesseract and ocr' it
+    const { createWorker } = Tesseract;
 
-          (async () => {
-            await worker.load();
-            await worker.loadLanguage('eng');
-            await worker.initialize('eng');
-            const { data: { text } } = await worker.recognize(data);
-    
-            document.getElementById('word-cloud-text-'+wpWordCloudSettings.id).textContent = text;
-    
-            await worker.terminate();
+    const worker = createWorker({
+      workerPath: 'https://unpkg.com/tesseract.js@v2.0.0/dist/worker.min.js',
+      langPath: 'https://tessdata.projectnaptha.com/4.0.0',
+      corePath: 'https://unpkg.com/tesseract.js-core@v2.0.0/tesseract-core.wasm.js',
+      logger: m => console.log(m),
+    });
 
-            $('.ocr-loader-container').hide();
+    $('.ocr-loader-container').show();
 
-            $(videoCaptureContainer).hide();
-            $(videoCaptureContainer).empty();
+    (async () => {
+      await worker.load();
+      await worker.loadLanguage('eng');
+      await worker.initialize('eng');
+      const { data: { text } } = await worker.recognize(data);
 
-            if (window.stream) {
-              window.stream.getTracks().forEach(track => {
-                track.stop();
-              });
-            }
+      document.getElementById('word-cloud-text-'+wpWordCloudSettings.id).textContent = text;
 
-          })();
+      await worker.terminate();
+
+      $('.ocr-loader-container').hide();
+
+      $(videoCaptureContainer).hide();
+      $(videoCaptureContainer).empty();
+
+      if (window.stream) {
+        window.stream.getTracks().forEach(track => {
+          track.stop();
+        });
+      }
+
+    })();
 
   }
 
