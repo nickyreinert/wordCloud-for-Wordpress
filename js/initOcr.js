@@ -307,6 +307,8 @@
 
   function takePictureMobile(file, wpWordCloudSettings) {
 
+    document.getElementById('word-cloud-text-'+wpWordCloudSettings.id).textContent = "lets go";
+
     var reader = new FileReader();
     reader.onload = function (e) {
       var data = e.target.result;
