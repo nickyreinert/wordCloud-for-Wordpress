@@ -21,15 +21,15 @@
           // on mobile browser use media capture API 
           // which provides a better handling 
           // see https://w3c.github.io/html-media-capture/
-        if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+        // if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
 
           addMobileDeviceCaptureButton(this, wpWordCloudSettings);
 
-        } else {
+        // } else {
 
           addLocalDeviceCaptureButton(this, wpWordCloudSettings);
 
-        }
+        // }
 
         addLoader(wpWordCloudSettings);
 
