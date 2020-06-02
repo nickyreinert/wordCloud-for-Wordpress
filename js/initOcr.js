@@ -21,15 +21,16 @@
           // on mobile browser use media capture API 
           // which provides a better handling 
           // see https://w3c.github.io/html-media-capture/
-        // if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+        if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
 
           addMobileDeviceCaptureButton(this, wpWordCloudSettings);
 
-        // } else {
+        } else {
 
           addLocalDeviceCaptureButton(this, wpWordCloudSettings);
 
-        // }
+        }
+
         addLoader(wpWordCloudSettings);
 
       } 
@@ -345,7 +346,7 @@
       workerPath: 'https://unpkg.com/tesseract.js@v2.0.0/dist/worker.min.js',
       langPath: 'https://tessdata.projectnaptha.com/4.0.0',
       corePath: 'https://unpkg.com/tesseract.js-core@v2.0.0/tesseract-core.wasm.js',
-      logger: m => console.log(m),
+      logger: m => document.getElementById('word-cloud-text-'+wpWordCloudSettings.id).textContent = m
     });
 
     $('.ocr-loader-container').show();
