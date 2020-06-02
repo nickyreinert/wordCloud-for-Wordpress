@@ -127,7 +127,7 @@
 }
 
 .ocr-loader-container {
-    position: absolute;
+    position: fixed;
     z-index: 1000;
     left: 50%;
     top: 50%;
