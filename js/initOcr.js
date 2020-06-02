@@ -22,7 +22,7 @@
           '<button class="text-from-image" id="word-cloud-text-from-image-'+wpWordCloudSettings.id+'">Photo</button>');
 
           $(this).find('.word-cloud-controller').prepend(
-          '<input id="word-cloud-text-from-image-'+wpWordCloudSettings.id+'" type="file" accept="image/*" capture="camera">');
+          '<input id="word-cloud-text-from-image-mobile-'+wpWordCloudSettings.id+'" type="file" accept="image/*" capture="camera">');
 
         $(this).append(
           '<div class="text-from-image-container" id="text-from-image-container-'+wpWordCloudSettings.id+'"></div>');
@@ -55,7 +55,7 @@
           reader.readAsDataURL(file);
         }
 
-        var input = document.getElementById('word-cloud-text-from-image-'+wpWordCloudSettings.id);
+        var input = document.getElementById('word-cloud-text-from-image-mobile-'+wpWordCloudSettings.id);
 
         input.addEventListener('change', function(){
           var file = input.files[0];
