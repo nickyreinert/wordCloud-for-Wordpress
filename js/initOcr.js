@@ -27,21 +27,41 @@
         $(this).append(
           '<div class="text-from-image-container" id="text-from-image-container-'+wpWordCloudSettings.id+'"></div>');
 
-          var myInput = document.getElementById('myFileInput');
 
-          function sendPic() {
-              var file = myInput.files[0];
-          
-              // Send file here either by adding it to a `FormData` object 
-              // and sending that via XHR, or by simply passing the file into 
-              // the `send` method of an XHR instance.
-              
-              console.log(file);
-          }
-          var input = document.getElementById('word-cloud-text-from-image-'+wpWordCloudSettings.id);
+        function takePictureMobile(file) {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            var dataURL = e.target.result,
+                c = document.querySelector('canvas'), // see Example 4
+                ctx = c.getContext('2d'),
+                img = new Image();
+       
+                // context.drawImage(video, 0, 0, width, height);
+    
+                // var data = canvas.toDataURL('image/png');
+                // image.setAttribute('src', data);
 
-          input.addEventListener('change', sendPic, false);
-          
+              ocrText(dataUrl);
+
+            // img.onload = function() {
+            //   c.width = img.width;
+            //   c.height = img.height;
+            //   ctx.drawImage(img, 0, 0);
+            // };
+       
+            // img.src = dataURL;
+          };
+       
+          reader.readAsDataURL(file);
+        }
+
+        var input = document.getElementById('word-cloud-text-from-image-'+wpWordCloudSettings.id);
+
+        input.addEventListener('change', function(){
+          var file = input.files[0];
+          takePictureMobile(file);
+        }, false);
+
         $('.text-from-image').click(function () {
 
           showCaptureControls(wpWordCloudSettings);
@@ -258,7 +278,6 @@
         
         var context = canvas.getContext('2d');
 
-        $('.ocr-loader-container').show();
 
         if (width && height) {
           canvas.width = width;
@@ -268,7 +287,20 @@
           var data = canvas.toDataURL('image/png');
           image.setAttribute('src', data);
           $(video).hide();
-    
+
+          ocrText(data);
+        
+        } else {
+                    
+          clearImage();
+
+        }
+
+        
+  };
+
+  function ocrText(data) {
+
           // now, as we have the document as an image,
           // pass it to tesseract and ocr' it
           const { createWorker } = Tesseract;
@@ -277,9 +309,11 @@
             workerPath: 'https://unpkg.com/tesseract.js@v2.0.0/dist/worker.min.js',
             langPath: 'https://tessdata.projectnaptha.com/4.0.0',
             corePath: 'https://unpkg.com/tesseract.js-core@v2.0.0/tesseract-core.wasm.js',
-            // logger: m => console.log(m),
+            logger: m => console.log(m),
           });
-    
+
+          $('.ocr-loader-container').show();
+
           (async () => {
             await worker.load();
             await worker.loadLanguage('eng');
@@ -302,16 +336,7 @@
             }
 
           })();
-        
-        } else {
-          
-          $('.ocr-loader-container').hide();
-          
-          clearImage();
 
-        }
-
-        
-};
+  }
 
 })(jQuery);
