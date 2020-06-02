@@ -21,9 +21,27 @@
         $(this).find('.word-cloud-controller').prepend(
           '<button class="text-from-image" id="word-cloud-text-from-image-'+wpWordCloudSettings.id+'">Photo</button>');
 
+          $(this).find('.word-cloud-controller').prepend(
+          '<input id="word-cloud-text-from-image-'+wpWordCloudSettings.id+'" type="file" accept="image/*" capture="camera">');
+
         $(this).append(
           '<div class="text-from-image-container" id="text-from-image-container-'+wpWordCloudSettings.id+'"></div>');
 
+          var myInput = document.getElementById('myFileInput');
+
+          function sendPic() {
+              var file = myInput.files[0];
+          
+              // Send file here either by adding it to a `FormData` object 
+              // and sending that via XHR, or by simply passing the file into 
+              // the `send` method of an XHR instance.
+              
+              console.log(file);
+          }
+          var input = document.getElementById('word-cloud-text-from-image-'+wpWordCloudSettings.id);
+
+          input.addEventListener('change', sendPic, false);
+          
         $('.text-from-image').click(function () {
 
           showCaptureControls(wpWordCloudSettings);
@@ -90,14 +108,15 @@
         image = document.getElementById('image-output-'+wpWordCloudSettings.id);
         deviceSelector = document.getElementById('device-selector-'+wpWordCloudSettings.id);
 
+        // different camera selected
         deviceSelector.addEventListener('change', function(){
 
           if (window.stream) {
             window.stream.getTracks().forEach(track => {
               track.stop();
-              console.log('stopping stream');
             });
           }
+
           if (this.value === '') {
 
             constraints = {
@@ -128,6 +147,7 @@
 
         });
 
+        // get available devices
         navigator.mediaDevices.enumerateDevices()
           .then(function(deviceInfos){
 
@@ -152,6 +172,7 @@
             removeCaptureControls(wpWordCloudSettings);
 
           });
+
         // If you get `TypeError: navigator.mediaDevices is undefined`
         // serve your page via HTTPS, otherwise access will be blocked
         navigator.mediaDevices.getUserMedia({video: true, audio: false})

@@ -74,11 +74,12 @@
 		wpWordCloudSettings.customBlackList = getCustomBlackList(wpWordCloudSettings);
 
 		wpWordCloudSettings.list = countWords(wpWordCloudSettings);
-
-		console.log(wpWordCloudSettings.list);
+		
 		wpWordCloudSettings.maxWeight = getMaxWeight(wpWordCloudSettings);
 		
 		wpWordCloudSettings = setWcCallbacks(wpWordCloudSettings);
+
+		console.log(wpWordCloudSettings.list);
 
 		WordCloud($('#word-cloud-' + wpWordCloudSettings.id)[0], wpWordCloudSettings);
 
