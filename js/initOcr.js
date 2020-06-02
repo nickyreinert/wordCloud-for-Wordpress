@@ -17,63 +17,55 @@
       // user can take a picture of a document, which will be converted to text
       // and then counted and rendered 
       if (wpWordCloudSettings.enableOcr == 1) {
-        
-        $(this).find('.word-cloud-controller').prepend(
-          '<button class="text-from-image" id="word-cloud-text-from-image-'+wpWordCloudSettings.id+'">Photo</button>');
 
-          $(this).find('.word-cloud-controller').prepend(
-          '<input id="word-cloud-text-from-image-mobile-'+wpWordCloudSettings.id+'" type="file" accept="image/*" capture="camera">');
+          // on mobile browser use media capture API 
+          // which provides a better handling 
+          // see https://w3c.github.io/html-media-capture/
+        if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
 
-        $(this).append(
-          '<div class="text-from-image-container" id="text-from-image-container-'+wpWordCloudSettings.id+'"></div>');
+          addMobileDeviceCaptureButton(this, wpWordCloudSettings);
 
+        } else {
 
-        function takePictureMobile(file) {
-          var reader = new FileReader();
-          reader.onload = function (e) {
-            var dataURL = e.target.result,
-                c = document.querySelector('canvas'), // see Example 4
-                ctx = c.getContext('2d'),
-                img = new Image();
-       
-                // context.drawImage(video, 0, 0, width, height);
-    
-                // var data = canvas.toDataURL('image/png');
-                // image.setAttribute('src', data);
+          addLocalDeviceCaptureButton(this, wpWordCloudSettings);
 
-              ocrText(dataUrl);
-
-            // img.onload = function() {
-            //   c.width = img.width;
-            //   c.height = img.height;
-            //   ctx.drawImage(img, 0, 0);
-            // };
-       
-            // img.src = dataURL;
-          };
-       
-          reader.readAsDataURL(file);
         }
 
-        var input = document.getElementById('word-cloud-text-from-image-mobile-'+wpWordCloudSettings.id);
-
-        input.addEventListener('change', function(){
-          var file = input.files[0];
-          takePictureMobile(file);
-        }, false);
-
-        $('.text-from-image').click(function () {
-
-          showCaptureControls(wpWordCloudSettings);
-          startCapture(wpWordCloudSettings);
-              
-        })
-    
-      }
+      } 
 
     });
 
-    
+    function addLocalDeviceCaptureButton(target, wpWordCloudSettings) {
+
+      $(target).find('.word-cloud-controller').prepend(
+        '<button class="text-from-image" id="word-cloud-text-from-image-'+wpWordCloudSettings.id+'">Photo</button>');
+
+      $(target).append(
+          '<div class="text-from-image-container" id="text-from-image-container-'+wpWordCloudSettings.id+'"></div>');
+  
+      $('.text-from-image').click(function () {
+
+        showCaptureControls(wpWordCloudSettings);
+        startCapture(wpWordCloudSettings);
+            
+      });
+  
+    }
+
+    function addMobileDeviceCaptureButton(target, wpWordCloudSettings) {
+      
+      $(target).find('.word-cloud-controller').prepend(
+        '<input id="word-cloud-text-from-image-mobile-'+wpWordCloudSettings.id+'" type="file" accept="image/*" capture="camera">');
+
+      var input = document.getElementById('word-cloud-text-from-image-mobile-'+wpWordCloudSettings.id);
+
+      input.addEventListener('change', function(){
+        var file = input.files[0];
+        takePictureMobile(file, wpWordCloudSettings);
+      }, false);
+
+    }
+
     function removeCaptureControls(wpWordCloudSettings) {
         var videoCaptureContainer =  $('#text-from-image-container-'+wpWordCloudSettings.id);
 
@@ -141,14 +133,21 @@
 
             constraints = {
               audio: false,
-              video: {facingMode : 'environment'}
+              video: {        
+                width: { ideal: 4096 },
+                height: { ideal: 2160 },
+                facingMode : 'environment'}
             };
     
           } else {
             
             constraints = {
               audio: false,
-              video: {deviceId : {exact: this.value }}
+              video: {
+                width: { ideal: 4096 },
+                height: { ideal: 2160 },
+                deviceId : {exact: this.value }
+              }
             };
   
           }
@@ -193,9 +192,18 @@
 
           });
 
+        constraints = {
+            audio: false,
+            video: {
+              width: { ideal: 4096 },
+              height: { ideal: 2160 },
+              deviceId : {exact: this.value }}
+        };
+
+
         // If you get `TypeError: navigator.mediaDevices is undefined`
         // serve your page via HTTPS, otherwise access will be blocked
-        navigator.mediaDevices.getUserMedia({video: true, audio: false})
+        navigator.mediaDevices.getUserMedia(constraints)
           .then(function(stream) {
             window.stream = stream; // make stream available to console
             video.srcObject = stream;
@@ -274,10 +282,9 @@
       // drawing that to the screen, we can change its size and/or apply
       // other changes before drawing it.
     
-      function takepicture(wpWordCloudSettings) {
+  function takepicture(wpWordCloudSettings) {
         
         var context = canvas.getContext('2d');
-
 
         if (width && height) {
           canvas.width = width;
@@ -288,7 +295,7 @@
           image.setAttribute('src', data);
           $(video).hide();
 
-          ocrText(data);
+          ocrText(data, wpWordCloudSettings);
         
         } else {
                     
@@ -296,10 +303,24 @@
 
         }
 
-        
   };
 
-  function ocrText(data) {
+  function takePictureMobile(file, wpWordCloudSettings) {
+
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      var data = e.target.result;
+
+      ocrText(data, wpWordCloudSettings);
+
+    };
+ 
+    reader.readAsDataURL(file);
+    
+  }
+
+
+  function ocrText(data, wpWordCloudSettings) {
 
           // now, as we have the document as an image,
           // pass it to tesseract and ocr' it
