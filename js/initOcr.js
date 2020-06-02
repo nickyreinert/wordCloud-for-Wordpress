@@ -351,6 +351,8 @@
 
     $('.ocr-loader-container').show();
 
+    $(videoCaptureContainer).hide();
+
     (async () => {
       await worker.load();
       await worker.loadLanguage('eng');
