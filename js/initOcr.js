@@ -346,7 +346,7 @@
       workerPath: 'https://unpkg.com/tesseract.js@v2.0.0/dist/worker.min.js',
       langPath: 'https://tessdata.projectnaptha.com/4.0.0',
       corePath: 'https://unpkg.com/tesseract.js-core@v2.0.0/tesseract-core.wasm.js',
-      logger: m => document.getElementById('word-cloud-text-'+wpWordCloudSettings.id).textContent = m
+      logger: m => document.getElementById('word-cloud-text-'+wpWordCloudSettings.id).textContent = JSON.stringify(m)
     });
 
     $('.ocr-loader-container').show();
