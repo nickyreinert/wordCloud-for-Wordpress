@@ -23,11 +23,13 @@
           // see https://w3c.github.io/html-media-capture/
         // if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
 
-          addMobileDeviceCaptureButton(this, wpWordCloudSettings);
+        addMobileDeviceCaptureButton(this, wpWordCloudSettings);
 
+        // disable getUserMedia due to quality and performance issues
+        // see here https://github.com/nickyreinert/wordCloud-for-Wordpress/issues/1
         // } else {
 
-          addLocalDeviceCaptureButton(this, wpWordCloudSettings);
+        //   addLocalDeviceCaptureButton(this, wpWordCloudSettings);
 
         // }
 
@@ -346,12 +348,10 @@
       workerPath: 'https://unpkg.com/tesseract.js@v2.0.0/dist/worker.min.js',
       langPath: 'https://tessdata.projectnaptha.com/4.0.0',
       corePath: 'https://unpkg.com/tesseract.js-core@v2.0.0/tesseract-core.wasm.js',
-      logger: m => document.getElementById('word-cloud-text-'+wpWordCloudSettings.id).textContent = JSON.stringify(m)
+      logger: m => console.log(m) // document.getElementById('word-cloud-text-'+wpWordCloudSettings.id).textContent = JSON.stringify(m)
     });
 
     $('.ocr-loader-container').show();
-
-    $(videoCaptureContainer).hide();
 
     (async () => {
       await worker.load();
