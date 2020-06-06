@@ -76,6 +76,8 @@ final class WPWordCloud {
 
 		}
 
+		$this->settings['plugin-path'] = plugin_dir_url( __DIR__ );
+
 	}
 
 	private function createDomData() {
@@ -254,8 +256,8 @@ final class WPWordCloud {
 			return '<p class="word-cloud-warning">'.$this->error.'</p>';
 
 		}
-
 		return $this->createDomData();
 
+		
     }
 }

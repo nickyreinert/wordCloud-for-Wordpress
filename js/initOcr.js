@@ -344,10 +344,24 @@
     // pass it to tesseract and ocr' it
     const { createWorker } = Tesseract;
 
+    if (wpWordCloudSettings.ocrLocalLibraries == true) {
+
+      workerPath = wpWordCloudSettings.pluginPath+'lib/worker.min.js';
+      langPath = wpWordCloudSettings.pluginPath+'lib';
+      corePath = wpWordCloudSettings.pluginPath+'lib/tesseract-core.wasm.js';
+
+    } else {
+
+      workerPath = 'https://unpkg.com/tesseract.js@v2.0.0/dist/worker.min.js';
+      langPath = 'https://tessdata.projectnaptha.com/4.0.0';
+      corePath = 'https://unpkg.com/tesseract.js-core@v2.0.0/tesseract-core.wasm.js';
+
+    }
+
     const worker = createWorker({
-      workerPath: 'https://unpkg.com/tesseract.js@v2.0.0/dist/worker.min.js',
-      langPath: 'https://tessdata.projectnaptha.com/4.0.0',
-      corePath: 'https://unpkg.com/tesseract.js-core@v2.0.0/tesseract-core.wasm.js',
+      workerPath: workerPath,
+      langPath: langPath,
+      corePath: corePath,
       logger: m => console.log(m) // document.getElementById('word-cloud-text-'+wpWordCloudSettings.id).textContent = JSON.stringify(m)
     });
 
