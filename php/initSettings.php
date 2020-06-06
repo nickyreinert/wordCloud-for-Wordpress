@@ -16,6 +16,7 @@
 			'count-words'	    => ['default' => false,                 'valid' => 'bool',   'hidden' => false, 'description' => 'Enthält die Quelle Text und müssen die Wörter erst gezählt werden?'],
             'enable-frontend-edit' => ['default' => 0,                  'valid' => 'bool','hidden' => false, 'description' => 'Zeigt im Frontend ein Textfeld an, damit der Besucher die WordCloud selber bearbeiten kann.'],
 			'enable-ocr'        => ['default' => 0,                     'valid' => 'bool','hidden' => false, 'description' => 'Ermögliche das Hinzufügen von Texten direkt von der Kamera des Gerätes.'],
+			'ocr-language'      => ['default' => 'deu',                 'hidden' => false, 'description' => 'Eine Liste unterstützter Sprachen und ihr Kürzel findest du hier: https://tesseract-ocr.github.io/tessdoc/Data-Files#data-files-for-version-400-november-29-2016. Du kannst mehrere Sprache mit Plus getrennt angeben (deu+eng).'],
 			'ocr-hint-fadeout'  => ['default' => 5000,                  'hidden' => false, 'description' => 'Wie lange soll der Hinweis-Text angezeigt werden, bevor er ausgeblendet wird (in Millisekunden)?'],
             'ocr-hint'          => ['default' => 'Klicke auf das Video, um ein Bild für OCR aufzunehmen. Drücke erneut, um die Aufnahme neu zu starten.',                  
                 'valid' => 'text', 'hidden' => false, 'description' => 'Hinweistext, der beim Aktivieren der OCR Funktion angezeigt wird.'],

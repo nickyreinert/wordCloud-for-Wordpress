@@ -71,6 +71,7 @@ function getWordCloudSettings(element) {
     processedSettings.sizeFactor 		= parseInt(settings['size-factor']);
 
     processedSettings.enableOcr 	    = settings['enable-ocr'];
+    processedSettings.ocrLanguage       = settings['ocr-language'];
     processedSettings.ocrHintFadeout    = settings['ocr-hint-fadeout'];
     processedSettings.ocrHint 	        = settings['ocr-hint'];
 

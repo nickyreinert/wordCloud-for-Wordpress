@@ -355,8 +355,8 @@
 
     (async () => {
       await worker.load();
-      await worker.loadLanguage('eng');
-      await worker.initialize('eng');
+      await worker.loadLanguage(wpWordCloudSettings.ocrLanguage);
+      await worker.initialize(wpWordCloudSettings.ocrLanguage);
       const { data: { text } } = await worker.recognize(data);
 
       document.getElementById('word-cloud-text-'+wpWordCloudSettings.id).textContent = text;
