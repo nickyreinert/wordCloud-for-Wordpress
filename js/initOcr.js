@@ -34,6 +34,7 @@
         // }
 
         addLoader(wpWordCloudSettings);
+        addProgressBar(this, wpWordCloudSettings);
 
       } 
 
@@ -55,6 +56,13 @@
             
       });
   
+    }
+
+    function addProgressBar(target, wpWordCloudSettings) {
+
+      $(target).find('.word-cloud-controller').prepend(
+        '<div class="word-cloud-text-from-image-progress-bar-container"><progress id="word-cloud-text-from-image-progress-bar-'+wpWordCloudSettings.id+'" min="0" max="1" value="0"/></div>');
+
     }
 
     function addLoader(wpWordCloudSettings) {
@@ -358,11 +366,20 @@
 
     }
 
+      
+    
+
     const worker = createWorker({
       workerPath: workerPath,
       langPath: langPath,
       corePath: corePath,
-      logger: m => console.log(m) // document.getElementById('word-cloud-text-'+wpWordCloudSettings.id).textContent = JSON.stringify(m)
+      logger: progress => {
+        
+        console.log(progress);
+        document.getElementById("word-cloud-text-from-image-progress-bar-"+wpWordCloudSettings.id).value = progress.progress;
+        
+      }
+      
     });
 
     $('.ocr-loader-container').show();

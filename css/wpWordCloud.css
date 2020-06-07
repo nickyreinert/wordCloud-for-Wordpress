@@ -147,6 +147,25 @@
     100% { transform: rotate(360deg); }
   } 
 
+
+.word-cloud-container input {
+    width: 80%;
+    margin: 1em auto;
+    display: block;
+}
+
+.word-cloud-text-from-image-progress-bar-container {
+    width: 80%;
+    margin: 0 auto;
+    height: 1em;
+    display: block;
+
+}
+    .word-cloud-text-from-image-progress-bar-container>progress{
+        width: 100%;
+    }
+
+
 .word-cloud-container textarea {
     width: 80%;
     margin: 0 auto;
