@@ -190,6 +190,12 @@ final class WPWordCloud {
 
 				$this->settings['data'] = get_post_meta(get_the_ID(), $source, TRUE);
 
+				if (is_array($this->settings['data'])) {
+				
+					$this->settings['data'] = 'Das custom field mit der id `'.$source.'` wurde nicht gefunden. Bitte prüfe die Einstellungen im Backend. ';
+				
+				}
+				
 				break;
 				
 			case 'sql':
@@ -235,9 +241,11 @@ final class WPWordCloud {
 		// otherwise data will be counted on frontend side
 		if ($this->settings['count-words'] != 1) {
 
-			$this->settings['list'] = $this->settings['data'];
+			// TODO: temporarily disabled count feature server side
+			// dont know yet if it makes sense to count words on two places
+			// $this->settings['list'] = $this->settings['data'];
 
-			$this->settings['data'] = NULL;
+			// $this->settings['data'] = $this->settings['data'];
 
 		} 
 

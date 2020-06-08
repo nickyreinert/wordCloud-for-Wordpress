@@ -36,7 +36,7 @@ function getWordCloudSettings(element) {
 
     // own settings
     processedSettings.id 				= settings['id'];
-    processedSettings.source 			= settings['source'];
+    processedSettings.sourceType 		= settings['source-type'];
     processedSettings.data 		    	= settings['data'];
     processedSettings.enableFrontendEdit = settings['enable-frontend-edit'];
     processedSettings.canvasWidth 		= settings['canvas-width'];
