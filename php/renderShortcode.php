@@ -219,11 +219,35 @@ final class WPWordCloud {
 	
 				break;
 
+			case 'id':
+				
+				$content_post = get_post($source);
+				$content = do_shortcode($content_post->post_content);
+				$content = apply_filters('the_content', $content);
+
+				// wp_strip_all_tags (resp. strip_tags) removes tag which
+				// creates a lot of connected words, so first injest
+				// a space after every tag closer 
+				$content = preg_replace('/>/', '> ', $content);
+				$content = wp_strip_all_tags($content, true);
+
+				$this->settings['data'] = $content;
+
+				break;
+
 			case 'url':
 
 				$request = wp_remote_get($source);
-				
-				$this->settings['data'] = wp_remote_retrieve_body($request);
+				$content = wp_remote_retrieve_body($request);
+
+				// wp_strip_all_tags (resp. strip_tags) removes tag which
+				// creates a lot of connected words, so first injest
+				// a space after every tag closer 
+				$content = preg_replace('/>/', '> ', $content);
+				$content = wp_strip_all_tags($content, true);
+
+				// remove html tags and line breaks
+				$this->settings['data'] = $content;
 
 				break;
 
