@@ -188,7 +188,7 @@ final class WPWordCloud {
 
 			case 'custom-field':
 
-				$this->settings['text'] = get_post_meta(get_the_ID(), $source, TRUE);
+				$this->settings['data'] = get_post_meta(get_the_ID(), $source, TRUE);
 
 				break;
 				
@@ -217,27 +217,27 @@ final class WPWordCloud {
 
 				$request = wp_remote_get($source);
 				
-				$this->settings['text'] = wp_remote_retrieve_body($request);
+				$this->settings['data'] = wp_remote_retrieve_body($request);
 
 				break;
 
 			case 'inline':
 			default:
 
-				$this->settings['text'] = $source;
+				$this->settings['data'] = $source;
 
 				break;
 
 		}
 
-		// if text already contains counted word list,
+		// if data already contains counted word list,
 		// pass it to list array
-		// otherwise text will be counted on frontend side
+		// otherwise data will be counted on frontend side
 		if ($this->settings['count-words'] != 1) {
 
-			$this->settings['list'] = $this->settings['text'];
+			$this->settings['list'] = $this->settings['data'];
 
-			$this->settings['text'] = NULL;
+			$this->settings['data'] = NULL;
 
 		} 
 

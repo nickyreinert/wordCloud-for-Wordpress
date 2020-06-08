@@ -8,7 +8,13 @@
 
 		var wpWordCloudSettings = getWordCloudSettings(this);
 
-		console.log(wpWordCloudSettings);
+		if (wpWordCloudSettings.data == null) {
+
+			wpWordCloudSettings.data = 'Kein Text übermittelt. Bitte prüfe die Einstellungen im Backend.';
+
+			wpWordCloudSettings.countWords = 1;
+
+		}
 
 		// add canvas
 		$(this).append('<div class="word-cloud-controller"></div>');
@@ -49,13 +55,10 @@
 
 			$(this).prepend('<textarea class="word-cloud-text" id="word-cloud-text-'+wpWordCloudSettings.id+'"></textarea>');
 
-			$('#word-cloud-text-'+wpWordCloudSettings.id).text(wpWordCloudSettings.text);
+			$('#word-cloud-text-'+wpWordCloudSettings.id).text(wpWordCloudSettings.data);
 
-		} else {
+		} 
 
-			wpWordCloudSettings.text = '';
-
-		}
 
 		wpWordCloudSettings.maxWeight = getMaxWeight(wpWordCloudSettings);
 
@@ -150,7 +153,7 @@
 
 	function countWords(settings) {
 
-		var textArray = settings.text.split(' ');
+		var textArray = settings.data.split(' ');
 		settings.list = {};
 
 		// first count the words
@@ -276,7 +279,7 @@
 			}
 
 		});
-		
+
 		// in order to start with the most important word in the center, sort the array
 		// thanks to https://stackoverflow.com/a/5200010
 		preparedWordList.sort(function(a, b) {
@@ -285,6 +288,7 @@
 
     			return a > b ? -1 : (a < b ? 1 : 0);
 		});
+
 
 		return preparedWordList;
 

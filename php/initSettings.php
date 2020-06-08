@@ -52,7 +52,7 @@
 			
             'id'				=> ['default' => "1",                   'hidden' => true, 'description' => 'Id die für die Word Cloud verwendet wird. Muss auf Seitenebene eindeutig sein.'],
 			'list'				=> ['default' => [],                    'hidden' => true, 'description' => 'Enthält die Liste gezählter Wörter.'],
-			'text'				=> ['default' => NULL,                  'hidden' => true, 'description' => 'Text oder gezählte Wörter.']
+			'data'				=> ['default' => NULL,                  'hidden' => true, 'description' => 'Text oder gezählte Wörter.']
 			
         ];
         
