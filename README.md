@@ -1,45 +1,101 @@
 # WP WordCloud
-A plugin for Wordpress to display cloud words on post and pages. The supported sources are:
+A plugin for Wordpress to display cloud words wherever you want from different sources.
 
-1. a list of counted words provided in the backend area or
-2. a text field on the frontend, where the visitor can paste text, that will be counted.
+## What is a word cloud?
+A word cloud visualizes occurences of words from a text. It counts the words and places them on a canvas. Based on the occurence of each word it calculates the size of the word. 
 
-You can paste text to the textfield on the frontend or take a picture with your device. Using the Tesseract-Library the text on the image will be recognized (OCR) and words will be counted.
+## Supported sources
+You can configure several sources:
+* inline: text is provided within the shortcode
+* url: text comes from another server
+* id: an id that points to a post or page
+* sql: a query to the database WordPress is using
+* custom-field: a custom field within your post / page
+* edit-field: a text field on the frontend of your post / page
+* image: an image the visitor of your website takes
 
-## The shortcode
-The shortcode to activate the word cloud is [wp-word-cloud]. You can put multiple word clouds to a page / post, but you always have to provide an unique id. 
+# Installation
 
-## The settings
+## Download
+
+On command line either use git or wget to download the files into this just created folder
+
+mkdir /htdocs/wp-content/plugins/WP-Word-Cloud
+cd /htdocs/wp-content/plugins/WP-Word-Cloud
+git clone https://github.com/nickyreinert/wordCloud-for-Wordpress.git .
+or
+cd /htdocs/wp-content/plugins/WP-Word-Cloud
+wget https://github.com/nickyreinert/wordCloud-for-Wordpress/archive/wordCloud-for-wordPress-2.zip --no-check-certificate
+unzip wordCloud-for-wordPress-2.zip -d WP-Word-Cloud
+
+Or using your PC and a FTP client:
+
+* download the archive https://github.com/nickyreinert/wordCloud-for-Wordpress/archive/wordCloud-for-wordPress-2.zip
+* extract the archive and rename the folder to WP-Word-Cloud
+* upload the folder WP-Word-Cloud to the plugin folder of your WordPress installation
+
+## Activate
+
+Navigate to the plugins section of your WordPress installation, search for the Plugin named "WP Word-Cloud" and press "activate".
+
+# Usage
+This plugin adds the shortcut [ wp-word-cloud ] to your WordPress site. The shortcode requires two mandatory information:
+* an id, that uniquely addresses the word cloud (you can have multiple WordClouds on a single page)
+* the definition, where the text for the word cloud comes from
+
+When you first download and activate the plugin, it comes with a couple of default settings that should work out-of-the-box with this implementation:
+
+[wp-word-cloud id="my-first-word-cloud"]https://de.wikipedia.org/wiki/Schlagwortwolke[/wp-word-cloud]
+
+If you are using Gutenberg, you need to add a Shortcode-Block to use shortcodes. Otherwise you can just paste the shortcode into your editor. 
+
+Of course there are a lot of settings to define how the WordCloud looks. Every setting has a default value, that you can edit in the settings area named "WP Word Cloud": wordCloud/wp-admin/options-general.php?page=wp-word-cloud. 
+
+Every default value is valid in your entire website. If you want to change one of those global default values, you simply overwrite it by adding it to your shortcode. If you want to draw your WordCloud like a circle, you provide the shape-setting:
+
+[wp-word-cloud id="my-first-word-cloud" shape="circle"]https://de.wikipedia.org/wiki/Schlagwortwolke[/wp-word-cloud]
+
+
+# Settings
 The plugin comes with a couple of default settings. You can edit those settings in the backend:
 
-wordCloud/wp-admin/options-general.php?page=wp-word-cloud
+## source-type
+The source-type defines, where your text comes from. Supported source-types are:
+#### inline
+The text is provided within the shortcode: 
+[wp-word-cloud id="my-first-word-cloud" source-type="inline"]Lorem Ipsum[/wp-word-cloud]
 
-If you pass the setting name to the shortcode, you can overwrite the setting for each implementation, e.g:
+### url
+The text comes from a remote server, identified by an URL:
+[wp-word-cloud id="my-first-word-cloud" source-type="url"]https://de.wikipedia.org/wiki/Schlagwortwolke[/wp-word-cloud]
 
-The global default setting min-word-length is 2. If you want to add a word cloud the minimum word length is 5, you use the shortcode like that:
+### id
+The text comes from a post or page of your website, identified by an id:
+[wp-word-cloud id="my-first-word-cloud" source-type="id"]42[/wp-word-cloud]
 
-[wp-word-cloud id="my-word-cloud" min-word-length=5]
+### sql
+(This feature is still experimental)
+The text comes from a table of your database. You have to provide the SQL. This only works, if the table is stored in the same database where WordPress is installed to. 
+[wp-word-cloud id="my-first-word-cloud" source-type="sql"]SELECT * FROM a_table[/wp-word-cloud]
 
-The following settings are currently supported: 
+### custom-field
+The text comes from a custom field, identified by an id.
+[wp-word-cloud id="my-first-word-cloud" source-type="custom-field"]a_custom_field[/wp-word-cloud]
 
-### source (parameter)
-Define the source of the word cloud. Valid parameters are:
-1. edit-field - an edit field on the frontend
-2. custom-field - a custom field in the backend
-3. sql - a database table
+## count-words
+If you provide a text, the words needs to be counted first. Set this value to 1 to count words. If you use the OCR feature, words will always be counted. You can also provide a list of counted words.
 
-### source-definition (string)
-If source=custom-field, this points the unique Id of the custom field. If source=sql, this value contains the SQL query. 
+[wp-word-cloud id="my-first-word-cloud" source-type="custom-field" count-words=1]a_custom_field[/wp-word-cloud]
 
-### count-words (boolean)
-If the source does contain a raw text, set this parameter to 1 to count the words. 
+### enable-frontend-edit
+If you enable this, a text field will be added to the frontend. The text field will contain the data you provided with the shortcode configuration and the visitor of the website can edit the text. 
 
-*This does not work if OCR is enabled*
+[wp-word-cloud id="my-first-word-cloud" source-type="custom-field" enable-frontend-edit=1]a_custom_field[/wp-word-cloud]
 
-### enable-ocr (boolean)
-If you enable this, your site visitor can use the devices camera to take a picture of a document. The text on the document will be recognized with OCR and used for the word cloud. 
+### enable-ocr
+If you enable this, your site visitor can use the devices camera to take a picture of a document. The text on the document will be recognized with OCR and the words will be counted. 
 
-*this only works when source=edit-field*
+*requires enable-frontend-edit=1*
 
 ### ocr-hint-fadeout (integer)
 How long will the OCR hint message be displayed (in milliseconds).
