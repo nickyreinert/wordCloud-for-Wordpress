@@ -1,6 +1,6 @@
 
 *.code-workspace
 .DS_Store
-*.traineddata.gz
-tesseract-core.wasm.js
-worker.min.js
+lib/*.traineddata.gz
+lib/tesseract-core.wasm.js
+lib/worker.min.js
