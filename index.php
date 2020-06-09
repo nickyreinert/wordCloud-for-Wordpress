@@ -8,7 +8,7 @@
  * @wordpress-plugin
  * Plugin Name:       WP Word-Cloud
  * Plugin URI:        https://www.nickyreinert.de/word-cloud
- * Description:       Draw a word cloud from custom words
+ * Description:       Draw word clouds based on text from several sources
  * Version:           2.0.0
  * Author:            Nicky Reinert
  * Author URI:        https://www.nickyreinert.de
