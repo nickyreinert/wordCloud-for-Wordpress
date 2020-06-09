@@ -233,7 +233,10 @@ final class WPWordCloud {
 
 				if ($content == '') {
 
-					$content = 'Als source-type wurde `id` angegeben. Die `id` '.$source.' liefert aber kein Ergebnis zurück. Existiert der Beitrag / die Seite? ';
+					$content = 'Fehler - Als source-type wurde `id` angegeben. Die `id` '.$source.' liefert aber kein Ergebnis zurück. Existiert der Beitrag / die Seite? - Fehler ';
+					$this->settings['min-word-occurence'] = 0;
+					$this->settings['min-word-occurence'] = 0;
+					$this->settings['enable-frontend-edit'] = 1;
 				}
 				$this->settings['data'] = $content;
 
