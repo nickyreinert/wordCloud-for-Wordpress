@@ -31,7 +31,7 @@
 			'text-transform'	=> ['default' => 'uppercase',           'valid' => ['uppercase', 'lowercase', 'none'], 'hidden' => false, 'description' => 'Sollen alle Wörter groß- oder kleingeschrieben werden?'],
 			
             'min-alpha'			=> ['default' => 0.1,                   'hidden' => false, 'description' => 'Der Mindestwert für die Transparenz der Wörter. Setze den Wert auf 1 für gar keine Transparenz.'],
-            'size-factor'		=> ['default' => 20,                    'hidden' => false, 'description' => 'Mit diesem Wert kannst du die Größe der Wörter beeinflussen. Je kleiner der Wert, desto größer die Wörter in der WordCloud.'],
+            'size-factor'		=> ['default' => 100,                    'hidden' => false, 'description' => 'Mit diesem Wert kannst du die Größe der Wörter beeinflussen. Je kleiner der Wert, desto größer die Wörter in der WordCloud.'],
 
             'canvas-width'		=> ['default' => '1024px',              'hidden' => false, 'description' => 'Lege die Breite des Canvas fest.'],
 			'canvas-height'		=> ['default' => '800px',               'hidden' => false, 'description' => 'Lege die Höhe des Canvas fest.'],
