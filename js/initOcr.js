@@ -364,10 +364,7 @@
       langPath = 'https://tessdata.projectnaptha.com/4.0.0';
       corePath = 'https://unpkg.com/tesseract.js-core@v2.0.0/tesseract-core.wasm.js';
 
-    }
-
-      
-    
+    } 
 
     const worker = createWorker({
       workerPath: workerPath,

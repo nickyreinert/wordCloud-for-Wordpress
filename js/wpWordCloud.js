@@ -15,8 +15,6 @@
 			wpWordCloudSettings.countWords = 1;
 
 		}
-		console.log(wpWordCloudSettings.data );	
-		console.log(wpWordCloudSettings );	
 
 		// add canvas
 		$(this).append('<div class="word-cloud-controller"></div>');
@@ -91,7 +89,7 @@
 		
 		wpWordCloudSettings = setWcCallbacks(wpWordCloudSettings);
 
-		console.log(wpWordCloudSettings.list);
+		console.log(wpWordCloudSettings);
 
 		WordCloud($('#word-cloud-' + wpWordCloudSettings.id)[0], wpWordCloudSettings);
 
