@@ -231,6 +231,10 @@ final class WPWordCloud {
 				$content = preg_replace('/>/', '> ', $content);
 				$content = wp_strip_all_tags($content, true);
 
+				if ($content == '') {
+
+					$content = 'Als source-type wurde `id` angegeben. Die `id` '.$source.' liefert aber kein Ergebnis zurück. Existiert der Beitrag / die Seite? ';
+				}
 				$this->settings['data'] = $content;
 
 				break;
