@@ -72,10 +72,7 @@ function getWordCloudSettings(element) {
 
     processedSettings.enableOcr 	    = settings['enable-ocr'];
     processedSettings.ocrLanguage       = settings['ocr-language'];
-    processedSettings.ocrLocalLibraries = settings['ocr-local-libraries'];
-    processedSettings.ocrHintFadeout    = settings['ocr-hint-fadeout'];
-    processedSettings.ocrHint 	        = settings['ocr-hint'];
-    
+    processedSettings.ocrLocalLibraries = settings['ocr-local-libraries'];    
     
     processedSettings.pluginPath 	    = settings['plugin-path'];
 
