@@ -1,4 +1,4 @@
-# WP WordCloud
+# WP Word Cloud
 A plugin for Wordpress to display cloud words wherever you want from different sources.
 
 ## What is a word cloud?
@@ -20,13 +20,15 @@ You can configure several sources:
 
 On command line either use git or wget to download the files into this just created folder
 
-mkdir /htdocs/wp-content/plugins/WP-Word-Cloud
-cd /htdocs/wp-content/plugins/WP-Word-Cloud
-git clone https://github.com/nickyreinert/wordCloud-for-Wordpress.git .
+	mkdir /htdocs/wp-content/plugins/WP-Word-Cloud
+    cd /htdocs/wp-content/plugins/WP-Word-Cloud
+	git clone https://github.com/nickyreinert/wordCloud-for-Wordpress.git .
+
 or
-cd /htdocs/wp-content/plugins/WP-Word-Cloud
-wget https://github.com/nickyreinert/wordCloud-for-Wordpress/archive/wordCloud-for-wordPress-2.zip --no-check-certificate
-unzip wordCloud-for-wordPress-2.zip -d WP-Word-Cloud
+
+	cd /htdocs/wp-content/plugins/WP-Word-Cloud
+	wget https://github.com/nickyreinert/wordCloud-for-Wordpress/archive/wordCloud-for-wordPress-2.zip --no-check-certificate
+	unzip wordCloud-for-wordPress-2.zip -d WP-Word-Cloud
 
 Or using your PC and a FTP client:
 
@@ -40,7 +42,7 @@ Navigate to the plugins section of your WordPress installation, search for the P
 
 # Usage
 This plugin adds the shortcut [ wp-word-cloud ] to your WordPress site. The shortcode requires two mandatory information:
-* an id, that uniquely addresses the word cloud (you can have multiple WordClouds on a single page)
+* an id, that uniquely addresses the word cloud (you can have multiple word clouds on a single page)
 * the definition, where the text for the word cloud comes from
 
 When you first download and activate the plugin, it comes with a couple of default settings that should work out-of-the-box with this implementation:
@@ -49,9 +51,9 @@ When you first download and activate the plugin, it comes with a couple of defau
 
 If you are using Gutenberg, you need to add a Shortcode-Block to use shortcodes. Otherwise you can just paste the shortcode into your editor. 
 
-Of course there are a lot of settings to define how the WordCloud looks. Every setting has a default value, that you can edit in the settings area named "WP Word Cloud": wordCloud/wp-admin/options-general.php?page=wp-word-cloud. 
+Of course there are a lot of settings to define how the word clouds looks. Every setting has a default value, that you can edit in the settings area named "WP Word Cloud": /wp-admin/options-general.php?page=wp-word-cloud. 
 
-Every default value is valid in your entire website. If you want to change one of those global default values, you simply overwrite it by adding it to your shortcode. If you want to draw your WordCloud like a circle, you provide the shape-setting:
+Every default value is valid in your entire website. If you want to change one of those global default values, you simply overwrite it by adding it to your shortcode. If you want to draw your word clouds like a circle, you provide the shape-setting:
 
 [wp-word-cloud id="my-first-word-cloud" shape="circle"]https://de.wikipedia.org/wiki/Schlagwortwolke[/wp-word-cloud]
 
@@ -134,6 +136,10 @@ CSS-like definition of the font-family.
 This plugin allows you to use shortcodes in pages and posts to create word clouds based on a list of counted words or a given text. The words will be rendered into a canvas. Based on their occurrences the size and color changes. This plugin is based on the great wordList2-library by timdream: https://github.com/timdream/wordcloud2.js
 
 The wordlist you provide to this plugin contains a simple list with two columns: The first column is the word, the second column contains the occurence of this word.
+
+
+## common errors
+* If min-word-occurence and min-word-lenght are to big, you may not see a word cloud rendered, because your text does not contain enough words!
 
 # Usage and installation
 

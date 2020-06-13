@@ -79,11 +79,19 @@
 
 		} 
 
-		wpWordCloudSettings.text = $('#word-cloud-text-'+wpWordCloudSettings.id).val();
-
 		wpWordCloudSettings.customBlackList = getCustomBlackList(wpWordCloudSettings);
 
-		wpWordCloudSettings.list = countWords(wpWordCloudSettings);
+		wpWordCloudSettings.data = $('#word-cloud-text-'+wpWordCloudSettings.id).val();
+
+		if (wpWordCloudSettings.countWords == 1) {
+
+			wpWordCloudSettings.list = countWords(wpWordCloudSettings);
+
+		} else {
+
+			wpWordCloudSettings.list = wpWordCloudSettings.data;
+
+		}
 		
 		wpWordCloudSettings.maxWeight = getMaxWeight(wpWordCloudSettings);
 		
@@ -153,37 +161,40 @@
 
 	function countWords(settings) {
 
-		var textArray = settings.data.split(' ');
+		var cleanText = settings.data.replace(new RegExp('['+settings.ignoreChars+']'), '');
+
+		var textArray = cleanText.split(' ');
+
 		settings.list = {};
 
 		// first count the words
 		$.each(textArray, function(index, word){
 
-			var cleanWord = word.replace(new RegExp('['+settings.ignoreChars+']'), '');
+			var word = word.replace(new RegExp('['+settings.ignoreChars+']'), '');
 			
 			if (settings.textTransform == 'uppercase') {
 
-				cleanWord = cleanWord.toUpperCase();
+				word = word.toUpperCase();
 
 			} else if (settings.textTransform == 'lowercase') {
 
-				cleanWord = cleanWord.toLowerCase();
+				word = word.toLowerCase();
 
 			}
 
-			if (typeof(settings.customBlackList[cleanWord]) === 'undefined' && 
-				!settings.blackList.includes(cleanWord) 
+			if (typeof(settings.customBlackList[word]) === 'undefined' && 
+				!settings.blackList.includes(word) 
 			) {
 
-				if (cleanWord.length >= settings.minWordLength) {
+				if (word.length >= settings.minWordLength) {
 
-					if (cleanWord in settings.list) {
+					if (word in settings.list) {
 						
-						settings.list[cleanWord] = settings.list[cleanWord] + 1;
+						settings.list[word] = settings.list[word] + 1;
 
 					} else {
 
-						settings.list[cleanWord] = 1;
+						settings.list[word] = 1;
 	
 					}
 
