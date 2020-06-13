@@ -161,7 +161,7 @@
 
 	function countWords(settings) {
 
-		var cleanText = settings.data.replace(new RegExp('['+settings.ignoreChars+']'), '');
+		var cleanText = settings.data.replace(new RegExp(settings.ignoreChars, 'gim'), '');
 
 		var textArray = cleanText.split(' ');
 
@@ -170,7 +170,7 @@
 		// first count the words
 		$.each(textArray, function(index, word){
 
-			var word = word.replace(new RegExp('['+settings.ignoreChars+']'), '');
+			// var word = word.replace(new RegExp('['+settings.ignoreChars+']'), '');
 			
 			if (settings.textTransform == 'uppercase') {
 
