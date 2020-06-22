@@ -78,5 +78,10 @@ function getWordCloudSettings(element) {
 
     processedSettings.pluginPath 	    = settings['plugin-path'];
 
+    if (processedSettings.debug == 1) {
+        
+        console.log({"WP WordCloud Settings" : processedSettings});
+
+    }
     return processedSettings;
 }

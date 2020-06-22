@@ -8,7 +8,11 @@
 
 		var wpWordCloudSettings = getWordCloudSettings(this);
 
+		wpwc(wpWordCloudSettings, "Read settings");
+		
 		if (wpWordCloudSettings.data == null) {
+
+			wpwc(wpWordCloudSettings, "Error: No text found.");
 
 			wpWordCloudSettings.data = 'Kein Text übermittelt. Bitte prüfe die Einstellungen im Backend.';
 
@@ -20,9 +24,13 @@
 		$(this).append('<div class="word-cloud-controller"></div>');
 		$(this).append('<canvas class="word-cloud" style="width: 100%" height="'+wpWordCloudSettings.canvasHeight+'" width="'+wpWordCloudSettings.canvasWidth+'" id="word-cloud-'+wpWordCloudSettings.id+'"></canvas>');
 
+		wpwc(wpWordCloudSettings, "Added canvas");
+
 		// add black list container
 		// contains words clicked by user
 		if (wpWordCloudSettings.enableCustomBlackList == 1) {
+
+			wpwc(wpWordCloudSettings, "Added black list container");
 
 			$(this).append('<p id="word-cloud-black-list-'+wpWordCloudSettings.id+'"></p>');
 
@@ -43,9 +51,17 @@
 
 			wpWordCloudSettings.list = countWords(wpWordCloudSettings);
 
+			wpwc(wpWordCloudSettings, "Counted words");
+
 		} else {
 
 			wpWordCloudSettings.list = wpWordCloudSettings.data;
+
+		}
+
+		if (wpWordCloudSettings.debug == 1) {
+
+			console.log({"WP WordCloud Words" : wpWordCloudSettings.list});
 
 		}
 
@@ -57,13 +73,14 @@
 
 			$('#word-cloud-text-'+wpWordCloudSettings.id).text(wpWordCloudSettings.data);
 
+			wpwc(wpWordCloudSettings, "Added edit field");
+
 		} 
 
 
 		wpWordCloudSettings.maxWeight = getMaxWeight(wpWordCloudSettings);
 
 		wpWordCloudSettings = setWcCallbacks(wpWordCloudSettings);
-
 
 		WordCloud($('#word-cloud-' + wpWordCloudSettings.id)[0], wpWordCloudSettings);
 
@@ -310,10 +327,10 @@
 
 		if (wpWordCloudSettings.debug == 1) {
 
-			console.log(message);
+			console.log("[WP WordCloud] " + message);
 
 		}
-		
+
 	}
 
 })(jQuery);
