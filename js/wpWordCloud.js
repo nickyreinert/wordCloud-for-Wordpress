@@ -65,7 +65,7 @@
 
 		}
 
-		if (wpWordCloudSettings.enableFrontendEdit == 1) {
+		if (wpWordCloudSettings.enableFrontendEdit == 1 || wpWordCloudSettings.enableOcr == 1) {
 
 			$(this).find('.word-cloud-controller').prepend('<button class="render-word-cloud" id="render-word-cloud-'+wpWordCloudSettings.id+'">Erstellen</button>');
 
