@@ -46,6 +46,7 @@
 			'shuffle'			=> ['default' => 1,                     'valid' => 'bool','hidden' => false, 'description' => 'Soll die Position der Wörter bei jedem Durchlauf neu durchgemischt werden?'],
 			'ellipticity'		=> ['default' => 1,                     'hidden' => false, 'description' => 'Wie elliptisch soll die WordCloud sein (0 - flach, 1 - kreisförmig)'],
 			'clear-canvas'		=> ['default' => 1,                     'valid' => 'bool','hidden' => false, 'description' => 'Soll die Zeichenfläche vor jedem Durchlauf neu gezeichnet werden?'],
+			'debug'     		=> ['default' => 0,                     'valid' => 'bool','hidden' => false, 'description' => 'Wenn du Probleme mit dem Plugin hast, kannst du hier die Ausgabe von zusätzlichen Informationen in der Konsole des Browsers aktivieren.'],
 			
             'id'				=> ['default' => "1",                   'hidden' => true, 'description' => 'Id die für die Word Cloud verwendet wird. Muss auf Seitenebene eindeutig sein.'],
 			'list'				=> ['default' => [],                    'hidden' => true, 'description' => 'Enthält die Liste gezählter Wörter.'],

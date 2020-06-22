@@ -74,6 +74,8 @@ function getWordCloudSettings(element) {
     processedSettings.ocrLanguage       = settings['ocr-language'];
     processedSettings.ocrLocalLibraries = settings['ocr-local-libraries'];    
     
+    processedSettings.debug 	        = settings['debug'];
+
     processedSettings.pluginPath 	    = settings['plugin-path'];
 
     return processedSettings;

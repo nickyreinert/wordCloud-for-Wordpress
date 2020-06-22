@@ -305,6 +305,17 @@
 
 	}
 
+	// log function
+	function wpwc(wpWordCloudSettings, message){
+
+		if (wpWordCloudSettings.debug == 1) {
+
+			console.log(message);
+
+		}
+		
+	}
+
 })(jQuery);
 
 
