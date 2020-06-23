@@ -77,7 +77,7 @@
     function addMobileDeviceCaptureButton(target, wpWordCloudSettings) {
       
       $(target).find('.word-cloud-controller').prepend(
-        '<input id="word-cloud-text-from-image-mobile-'+wpWordCloudSettings.id+'" type="file" accept="image/*" capture="camera">');
+        '<input id="word-cloud-text-from-image-mobile-'+wpWordCloudSettings.id+'" type="file" accept="image/*;capture=camera">');
 
       var input = document.getElementById('word-cloud-text-from-image-mobile-'+wpWordCloudSettings.id);
 
