@@ -100,15 +100,7 @@
 
 		wpWordCloudSettings.data = $('#word-cloud-text-'+wpWordCloudSettings.id).val();
 
-		if (wpWordCloudSettings.countWords == 1) {
-
-			wpWordCloudSettings.list = countWords(wpWordCloudSettings);
-
-		} else {
-
-			wpWordCloudSettings.list = wpWordCloudSettings.data;
-
-		}
+		wpWordCloudSettings.list = countWords(wpWordCloudSettings);
 		
 		wpWordCloudSettings.maxWeight = getMaxWeight(wpWordCloudSettings);
 		
