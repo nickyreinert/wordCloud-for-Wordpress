@@ -33,7 +33,9 @@
 			wpwc(wpWordCloudSettings, "Added black list container");
 
 			$(this).append('<p id="word-cloud-black-list-'+wpWordCloudSettings.id+'"></p>');
-
+			$(this).append('<input checked type="checkbox" class="activate-black-list" id="word-cloud-activate-black-list-'+wpWordCloudSettings.id+'" name="word-cloud-activate-black-list-'+wpWordCloudSettings.id+'">');
+			$(this).append('<label for="word-cloud-activate-black-list-'+wpWordCloudSettings.id+'">Ignore-Liste anwenden</label>');
+			
 		}
 
 		// add hover container
@@ -65,6 +67,8 @@
 
 		}
 
+		console.log(wpWordCloudSettings.data);
+
 		if (wpWordCloudSettings.enableFrontendEdit == 1 || wpWordCloudSettings.enableOcr == 1) {
 
 			$(this).find('.word-cloud-controller').prepend('<button class="render-word-cloud" id="render-word-cloud-'+wpWordCloudSettings.id+'">Erstellen</button>');
@@ -74,7 +78,7 @@
 			$('#word-cloud-text-'+wpWordCloudSettings.id).text(wpWordCloudSettings.data);
 
 			wpwc(wpWordCloudSettings, "Added edit field");
-
+		
 		} 
 
 
@@ -85,6 +89,30 @@
 		WordCloud($('#word-cloud-' + wpWordCloudSettings.id)[0], wpWordCloudSettings);
 
 	});
+
+	$('.activate-black-list').click(function() {
+
+		var wpWordCloudSettings = getWordCloudSettings($(this).parent()[0]);
+
+		if (wpWordCloudSettings.persistentCustomBlackList == 0) {
+			
+			$('#word-cloud-black-list-' + wpWordCloudSettings.id).children().remove();
+
+		} 
+
+		wpWordCloudSettings.customBlackList = getCustomBlackList(wpWordCloudSettings);
+
+		wpWordCloudSettings.list = countWords(wpWordCloudSettings);
+		
+		wpWordCloudSettings.maxWeight = getMaxWeight(wpWordCloudSettings);
+		
+		wpWordCloudSettings = setWcCallbacks(wpWordCloudSettings);
+
+		console.log(wpWordCloudSettings);
+
+		WordCloud($('#word-cloud-' + wpWordCloudSettings.id)[0], wpWordCloudSettings);
+
+	})
 
 	$('.render-word-cloud').click(function() {
 
@@ -113,6 +141,8 @@
 	});
 
 	function addWordToBlackList(item, settings) {
+
+		wpwc(settings, "User added word to ingore list.");
 
 		// add word to black list below the word cloud
 		$('#word-cloud-black-list-'+settings.id).append('<span count='+item[1]+' class="black-list-item"><span class="black-list-word">' + item[0] + '</span><span class="black-list-word-removal">&#x2A2F;</span></span>');
@@ -155,25 +185,27 @@
 
 		var blackList = {};
 
-		$('#word-cloud-black-list-' + settings.id).children().each(function(){
+		if ($("#word-cloud-activate-black-list-"+settings.id).is(":checked")) {
 
-			var count = $(this).attr('count');
-			var word = $(this).find('.black-list-word').html();
+			$('#word-cloud-black-list-' + settings.id).children().each(function(){
 
-			blackList[word] = count;
+				var count = $(this).attr('count');
+				var word = $(this).find('.black-list-word').html();
+	
+				blackList[word] = count;
+	
+			})
+	
+		} 
 
-		})
-		
 		return blackList;
 
 	}
 
 	function countWords(settings) {
 
-		console.log(settings.ignoreChars);
-		console.log(settings.data);
 		var cleanText = settings.data.replace(new RegExp(settings.ignoreChars, 'gim'), '');
-		console.log(cleanText);
+
 		var textArray = cleanText.split(' ');
 
 		settings.list = {};
@@ -266,7 +298,11 @@
 		// an ignore list
 		settings.click = function (item, dimension, event) {
 
-			addWordToBlackList(item, settings);
+			if ($("#word-cloud-activate-black-list-"+settings.id).is(":checked")) {
+
+				addWordToBlackList(item, settings);
+
+			}
 
 		};
 
