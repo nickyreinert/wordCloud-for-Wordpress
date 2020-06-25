@@ -47,7 +47,7 @@
 
 		})
 		
-		if (wpWordCloudSettings.countWords == 1) {
+		if (wpWordCloudSettings.countWords == 1 || wpWordCloudSettings.list == "") {
 
 			wpWordCloudSettings.list = countWords(wpWordCloudSettings);
 
@@ -170,8 +170,10 @@
 
 	function countWords(settings) {
 
+		console.log(settings.ignoreChars);
+		console.log(settings.data);
 		var cleanText = settings.data.replace(new RegExp(settings.ignoreChars, 'gim'), '');
-
+		console.log(cleanText);
 		var textArray = cleanText.split(' ');
 
 		settings.list = {};
