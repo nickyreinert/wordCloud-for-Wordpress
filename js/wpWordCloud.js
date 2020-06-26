@@ -225,8 +225,12 @@
 
 			}
 
-			if (typeof(settings.customBlackList[word]) === 'undefined' && 
-				!settings.blackList.includes(word) 
+			if ((
+				typeof(settings.customBlackList[word]) === 'undefined' && 
+				!settings.blackList.includes(word)
+				) ||
+				!$("#word-cloud-activate-black-list-"+settings.id).is(":checked") 
+ 				
 			) {
 
 				if (word.length >= settings.minWordLength) {
