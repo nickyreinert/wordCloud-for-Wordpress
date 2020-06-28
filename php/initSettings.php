@@ -38,8 +38,9 @@
 			'font-family'		=> ['default' => 'Arial, sans-serif',   'hidden' => false, 'description' => 'Die CSS-Angabe für die verwendete Schriftart.'],
 			'min-size'			=> ['default' => 1,                     'hidden' => false, 'description' => 'Wie groß muss ein Wort sein, um in der WordCloud angezeigt zu werden?'],
 			'font-weight'		=> ['default' => 'bold',                'hidden' => false, 'description' => 'Das Gewicht der Wörter (bold, normal oder z.B. als Ziffer: 100)'],
-			'min-rotation'		=> ['default' => 0,                     'hidden' => false, 'description' => 'Um wieviel Grad sollen die Wörter mindestens gedreht werden?'],
-			'max-rotation'		=> ['default' => 0,                     'hidden' => false, 'description' => 'Um wieviel Grad sollen die Wörter höchstens gedreht werden?'],
+			'min-rotation'		=> ['default' => 0,                     'hidden' => false, 'description' => 'Um wieviel Rad sollen die Wörter mindestens gedreht werden?'],
+			'max-rotation'		=> ['default' => 0,                     'hidden' => false, 'description' => 'Um wieviel Rad sollen die Wörter höchstens gedreht werden?'],
+			'rotate-ratio'		=> ['default' => 0,                     'hidden' => false, 'description' => 'Mit welcher Wahrscheinlichkeit sollen Wörter gedreht werden? (1 - alle, 0 - keine Wörter werden gedreht)'],
 			'shape'				=> ['default' => 'circle',              'valid' => ['circle', 'cardioid', 'diamond', 'triangle', 'pentagon', 'star', 'square', 'triangle-forward'], 'hidden' => false, 'description' => 'Welche Form soll die WordCloud haben?'],
 			'draw-out-of-bound'	=> ['default' => 1,                     'valid' => 'bool','hidden' => false, 'description' => 'Sollen auch Wörter dargestellt werden, die nicht mehr auf die Zeichenfläche passen?'],
 			'shrink-to-fit'	    => ['default' => 0,                     'valid' => 'bool','hidden' => false, 'description' => 'Verkleinere das Wort, damit es auf die Zeichenfläche passt?'],
@@ -109,18 +110,18 @@
                                 }
                                 echo '</select>';
 
-                            // add checkbox if it is a true/false option
                             } else if ($value['valid'] == 'text') {
 
                                 echo '<textarea id="'.$name.'" name="'.$name.'">'.get_option($name).'</textarea>';
 
+                            // add checkbox if it is a true/false option
                             } else if ($value['valid'] == 'bool') {
 
                                 echo '<input type="checkbox" id="'.$name.'" value=1 name="'.$name.'" '.checked(1, get_option($name), false).'>';
 
                             } else {
 
-                                echo '<input type="text" id="'.$name.'" name="'.$name.'" value="'.get_option($name).'"';
+                                echo '<input type="text" id="'.$name.'" name="'.$name.'" value="'.esc_attr(get_option($name)).'"';
                             
                             }
 
