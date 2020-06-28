@@ -25,8 +25,9 @@ function getWordCloudSettings(element) {
     processedSettings.fontFamily 		= settings['font-family'];
     processedSettings.minSize 			= settings['min-size'];
     processedSettings.fontWeight 		= settings['font-weight'];
-    processedSettings.minRotation 		= settings['min-rotation'];
-    processedSettings.maxRotation 		= settings['max-rotation'];
+    processedSettings.minRotation 		= parseFloat(settings['min-rotation']);
+    processedSettings.maxRotation 		= parseFloat(settings['max-rotation']);
+    processedSettings.rotateRatio 		= parseFloat(settings['rotate-ratio']);
     processedSettings.shape 			= settings['shape'];
     processedSettings.drawOutOfBound 	= settings['draw-out-of-bound'];
     processedSettings.shrinkToFit   	= settings['shrink-to-fit'];
