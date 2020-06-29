@@ -33,9 +33,13 @@
 			wpwc(wpWordCloudSettings, "Added black list container");
 
 			$(this).append('<p id="word-cloud-black-list-'+wpWordCloudSettings.id+'"></p>');
-			$(this).append('<input checked type="checkbox" class="activate-black-list" id="word-cloud-activate-black-list-'+wpWordCloudSettings.id+'" name="word-cloud-activate-black-list-'+wpWordCloudSettings.id+'">');
 			$(this).append('<label for="word-cloud-activate-black-list-'+wpWordCloudSettings.id+'">Ignore-Liste anwenden</label>');
 			
+		}
+		if (wpWordCloudSettings.enableCustomBlackList == 1 || wpWordCloudSettings.enable-black-list == 1) {
+
+			$(this).append('<input checked type="checkbox" class="activate-black-list" id="word-cloud-activate-black-list-'+wpWordCloudSettings.id+'" name="word-cloud-activate-black-list-'+wpWordCloudSettings.id+'">');
+
 		}
 
 		// add hover container
