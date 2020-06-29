@@ -51,7 +51,9 @@ function getWordCloudSettings(element) {
     processedSettings.minWordLength 	= settings['min-word-length'];
     processedSettings.minWordOccurence 	= settings['min-word-occurence'];
 
-    if (settings['enable-black-list'] == 1) {
+    processedSettings.enableBlackList 	= settings['enable-black-list'];
+
+    if (processedSettings.enableBlackList  == 1) {
         
         processedSettings.blackList		= settings['black-list'].split(' ');
 

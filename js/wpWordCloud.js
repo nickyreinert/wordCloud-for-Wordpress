@@ -36,7 +36,7 @@
 			$(this).append('<label for="word-cloud-activate-black-list-'+wpWordCloudSettings.id+'">Ignore-Liste anwenden</label>');
 			
 		}
-		if (wpWordCloudSettings.enableCustomBlackList == 1 || wpWordCloudSettings.enable-black-list == 1) {
+		if (wpWordCloudSettings.enableCustomBlackList == 1 || wpWordCloudSettings.enableBlackList == 1) {
 
 			$(this).append('<input checked type="checkbox" class="activate-black-list" id="word-cloud-activate-black-list-'+wpWordCloudSettings.id+'" name="word-cloud-activate-black-list-'+wpWordCloudSettings.id+'">');
 
