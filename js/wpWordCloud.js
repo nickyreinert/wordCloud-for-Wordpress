@@ -71,8 +71,6 @@
 
 		}
 
-		console.log(wpWordCloudSettings.data);
-
 		if (wpWordCloudSettings.enableFrontendEdit == 1 || wpWordCloudSettings.enableOcr == 1) {
 
 			$(this).find('.word-cloud-controller').prepend('<button class="render-word-cloud" id="render-word-cloud-'+wpWordCloudSettings.id+'">Erstellen</button>');
@@ -106,13 +104,19 @@
 
 		wpWordCloudSettings.customBlackList = getCustomBlackList(wpWordCloudSettings);
 
+		if (processedSettings.enableFrontendEdit == 1) {
+
+			wpWordCloudSettings.data = $('#word-cloud-text-'+wpWordCloudSettings.id).val();
+
+		}
+
 		wpWordCloudSettings.list = countWords(wpWordCloudSettings);
 		
 		wpWordCloudSettings.maxWeight = getMaxWeight(wpWordCloudSettings);
 		
 		wpWordCloudSettings = setWcCallbacks(wpWordCloudSettings);
 
-		console.log(wpWordCloudSettings);
+		console.log(wpWordCloudSettings.list);
 
 		WordCloud($('#word-cloud-' + wpWordCloudSettings.id)[0], wpWordCloudSettings);
 
