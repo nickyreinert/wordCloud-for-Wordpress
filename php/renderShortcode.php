@@ -60,11 +60,11 @@ final class WPWordCloud {
 		switch ($this->settings['text-transform']) {
 
 			case 'uppercase':
-				$this->settings['black-list'] = strtoupper($this->settings['black-list']);
+				$this->settings['black-list'] = mb_strtoupper($this->settings['black-list']);
 				break;
 
 			case 'lowercase':
-				$this->settings['black-list'] = strtolower($this->settings['black-list']);
+				$this->settings['black-list'] = mb_strtolower($this->settings['black-list']);
 				break;
 
 		}
@@ -186,6 +186,18 @@ final class WPWordCloud {
 
 		switch ($this->settings['source-type']) {
 
+			case 'tags':
+
+				$this->settings['count-words'] = 0;
+
+				foreach (get_tags() as $tag) {
+
+					$this->settings['list'][] = [$tag->name => $tag->count];
+
+				}
+
+				break;
+
 			case 'custom-field':
 
 				$this->settings['data'] = get_post_meta(get_the_ID(), $source, TRUE);
@@ -270,7 +282,7 @@ final class WPWordCloud {
 		// if data already contains counted word list,
 		// pass it to list array
 		// otherwise data will be counted on frontend side
-		if ($this->settings['count-words'] != 1) {
+		// if ($this->settings['count-words'] != 1) {
 
 			// TODO: temporarily disabled count feature server side
 			// dont know yet if it makes sense to count words on two places
@@ -278,7 +290,7 @@ final class WPWordCloud {
 
 			// $this->settings['data'] = $this->settings['data'];
 
-		} 
+		// } 
 
 	}
 
