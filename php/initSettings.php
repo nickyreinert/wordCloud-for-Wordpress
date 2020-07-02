@@ -12,7 +12,7 @@
     function wp_word_cloud_get_global_settings() {
 
         return [
-			'source-type'		=> ['default' => 'url',                 'valid' => ['inline', 'url', 'sql', 'custom-field', 'id'], 'hidden' => false, 'description' => 'Woher kommt die Liste gezählter Wörter? Möglich sind url, inline, sql, post oder page id sowie custom-field'],
+			'source-type'		=> ['default' => 'url',                 'valid' => ['inline', 'url', 'sql', 'custom-field', 'id', 'tags'], 'hidden' => false, 'description' => 'Woher kommt die Liste gezählter Wörter? Möglich sind url, inline, sql, post oder page id sowie custom-field'],
 			'count-words'	    => ['default' => false,                 'valid' => 'bool',   'hidden' => false, 'description' => 'Enthält die Quelle Text und müssen die Wörter erst gezählt werden?'],
             'enable-frontend-edit' => ['default' => 0,                  'valid' => 'bool','hidden' => false, 'description' => 'Zeigt im Frontend ein Textfeld an, damit der Besucher die WordCloud selber bearbeiten kann.'],
 			'enable-ocr'        => ['default' => 0,                     'valid' => 'bool','hidden' => false, 'description' => 'Ermögliche das Hinzufügen von Texten direkt von der Kamera des Gerätes.'],

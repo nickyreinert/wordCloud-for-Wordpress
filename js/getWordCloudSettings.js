@@ -1,5 +1,3 @@
-
-
 function getWordCloudSettings(element) {
 
     // transfer settings to word cloud object
@@ -14,12 +12,21 @@ function getWordCloudSettings(element) {
     
     // get array from object
     if (settings['list'] != null) {
-
-        processedSettings.list = Object.keys(settings['list']).map(function(key) {
-            return [Number(key), settings['list'][key]];
-          });
     
+        processedSettings.list = [];
+
+        for (var key in settings['list']) {
+
+            if (settings['list'].hasOwnProperty(key)) {
+
+                processedSettings.list.push([key, settings['list'][key]]);
+
+            }
+
+        }
+
     }
+
     processedSettings.backgroundColor 	= settings['background-color'];
     processedSettings.gridSize 			= settings['grid-size'];
     processedSettings.fontFamily 		= settings['font-family'];
@@ -83,8 +90,11 @@ function getWordCloudSettings(element) {
 
     if (processedSettings.debug == 1) {
         
+        console.log("[WP WordCloud] Init `" + processedSettings.id + "` -----------------");
         console.log({"WP WordCloud Settings" : processedSettings});
 
     }
+
     return processedSettings;
+
 }

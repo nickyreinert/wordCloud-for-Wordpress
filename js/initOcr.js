@@ -11,6 +11,8 @@
 
     $(".word-cloud-container").each(function () {
 
+      console.log('five #################');
+
       var wpWordCloudSettings = getWordCloudSettings(this);
           
       // if ocr is enable, add button and overlay

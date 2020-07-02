@@ -192,7 +192,7 @@ final class WPWordCloud {
 
 				foreach (get_tags() as $tag) {
 
-					$this->settings['list'][] = [$tag->name => $tag->count];
+					$this->settings['list'][$tag->name] = $tag->count;
 
 				}
 

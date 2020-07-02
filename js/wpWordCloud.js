@@ -1,4 +1,5 @@
 (function ($) {
+
 	'use strict';
 
 	// init
@@ -10,13 +11,13 @@
 
 		wpwc(wpWordCloudSettings, "Read settings");
 		
-		if (wpWordCloudSettings.data == null) {
+		if (wpWordCloudSettings.data == null && wpWordCloudSettings.list == null) {
 
 			wpwc(wpWordCloudSettings, "Error: No text found.");
 
 			wpWordCloudSettings.data = 'Kein Text übermittelt. Bitte prüfe die Einstellungen im Backend.';
 
-			wpWordCloudSettings.countWords = 1;
+			wpWordCloudSettings.countWords = 0;
 
 		}
 
@@ -53,15 +54,11 @@
 
 		})
 		
-		if (wpWordCloudSettings.countWords == 1 || wpWordCloudSettings.list == "") {
+		if (wpWordCloudSettings.countWords == 1) {
 
 			wpWordCloudSettings.list = countWords(wpWordCloudSettings);
 
 			wpwc(wpWordCloudSettings, "Counted words");
-
-		} else {
-
-			wpWordCloudSettings.list = wpWordCloudSettings.data;
 
 		}
 
