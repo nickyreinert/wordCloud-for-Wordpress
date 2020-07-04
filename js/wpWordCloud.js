@@ -21,6 +21,14 @@
 
 		}
 
+		if (wpWordCloudSettings.list == null && wpWordCloudSettings.countWords != 1) {
+		
+			wpWordCloudSettings.countWords = 1;
+
+			wpwc(wpWordCloudSettings, "%cAchtung: count-words ist nicht aktiviert und wird automatisch auf 1 gesetzt.", 1);
+	
+		}
+
 		// add canvas and / or html
 		$(this).append('<div class="word-cloud-controller"></div>');
 		if (wpWordCloudSettings.style == 'html') {
@@ -383,11 +391,17 @@
 	}
 
 	// log function
-	function wpwc(wpWordCloudSettings, message){
+	function wpwc(wpWordCloudSettings, message, error = 0){
 
 		if (wpWordCloudSettings.debug == 1) {
 
 			console.log("[WP WordCloud] " + message);
+
+		}
+
+		if (error > 0) {
+
+			console.warn("[WP WordCloud] " + message, 'color: red;');
 
 		}
 
