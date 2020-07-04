@@ -21,9 +21,18 @@
 
 		}
 
-		// add canvas
+		// add canvas and / or html
 		$(this).append('<div class="word-cloud-controller"></div>');
-		$(this).append('<canvas class="word-cloud" style="width: 100%" height="'+wpWordCloudSettings.canvasHeight+'" width="'+wpWordCloudSettings.canvasWidth+'" id="word-cloud-'+wpWordCloudSettings.id+'"></canvas>');
+		if (wpWordCloudSettings.style == 'html') {
+
+			$(this).append('<div class="word-cloud" style="position: relative; height: '+wpWordCloudSettings.canvasHeight+'; width: '+wpWordCloudSettings.canvasWidth+';" id="word-cloud-html-'+wpWordCloudSettings.id+'"></div>');
+			$(this).append('<canvas class="word-cloud" style="width: 100%; display: none;" height="'+wpWordCloudSettings.canvasHeight+'" width="'+wpWordCloudSettings.canvasWidth+'" id="word-cloud-'+wpWordCloudSettings.id+'"></canvas>');
+
+		} else {
+
+			$(this).append('<canvas class="word-cloud" style="width: 100%" height="'+wpWordCloudSettings.canvasHeight+'" width="'+wpWordCloudSettings.canvasWidth+'" id="word-cloud-'+wpWordCloudSettings.id+'"></canvas>');
+
+		}
 
 		wpwc(wpWordCloudSettings, "Added canvas");
 
@@ -85,8 +94,20 @@
 
 		wpWordCloudSettings = setWcCallbacks(wpWordCloudSettings);
 
-		WordCloud($('#word-cloud-' + wpWordCloudSettings.id)[0], wpWordCloudSettings);
+		if (wpWordCloudSettings.style == 'html') {
+		
+			WordCloud(
+				[$('#word-cloud-' + wpWordCloudSettings.id)[0],
+				$('#word-cloud-html-' + wpWordCloudSettings.id)[0]],
+				wpWordCloudSettings);
 
+		} else {
+		
+			WordCloud(
+				$('#word-cloud-' + wpWordCloudSettings.id)[0],
+				wpWordCloudSettings);
+			
+		}
 	});
 
 	$('.activate-black-list').click(function() {

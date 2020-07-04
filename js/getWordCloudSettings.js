@@ -41,6 +41,7 @@ function getWordCloudSettings(element) {
     processedSettings.shuffle 			= settings['shuffle'];
     processedSettings.ellipticity 		= settings['ellipticity'];
     processedSettings.clearCanvas 		= settings['clear-canvas'];
+    processedSettings.style      		= settings['style'];
 
     // own settings
     processedSettings.id 				= settings['id'];
