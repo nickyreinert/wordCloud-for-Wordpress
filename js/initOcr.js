@@ -361,7 +361,7 @@
     } else {
 
       workerPath = 'https://unpkg.com/tesseract.js@v2.1.3/dist/worker.min.js';
-      langPath = 'https://tessdata.projectnaptha.com/4.0.0';
+      langPath = 'https://tessdata.projectnaptha.com/4.0.0_fast';
       corePath = 'https://unpkg.com/tesseract.js-core@v2.2.0/tesseract-core.wasm.js';
 
     } 
