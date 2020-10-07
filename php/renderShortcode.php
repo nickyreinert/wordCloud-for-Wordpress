@@ -215,20 +215,69 @@ final class WPWordCloud {
 				// get text from data base using sql 
 				global $wpdb;
 
-				$wpdb->show_errors(); 
+				// $wpdb->show_errors(); 
 
-				$sql = $wpdb->prepare($source);
+				// WP converts " and ' into &#8221; (”) or &#8216; (‘) - and vice versa for the other side
+				// this will not work within a SQL query, so we have to at leaste 
+				$weird_quotation_marks = [
+					'&#8220;', 
+					'&#8221;', 
+					'&#8216;',
+					'&#8217;'
+				];
 				
-				$data = $wpdb->get_results($sql);
+				$nice_quotation_marks = [
+					'"',
+					'"',
+					"'",			
+					"'"				
+				];
+				
+				$data = $wpdb->get_results(str_replace($weird_quotation_marks, $nice_quotation_marks, $source));
 
-				foreach ($data as $row) {
+				if (sizeof($data) <= 0) {
+				
+					$this->error = 'Die Abfrage '.$source.' liefert kein Ergebnis zurück';
+					
+				} else {
+					
+					if ($this->settings['count-words'] == 1) {
 						
-					$wordList[] = [$row->word, $row->count];
+						$content_array = [];
+						
+						foreach ($data as $row) {
+							
+							$content_array[] = [$row->word, $row->count];
 
+						}
+
+						$this->settings['list'] = $content_array;
+
+					} else {
+
+						$content_array = [];
+						$content = '';
+
+						foreach ($data as $row)  {
+							
+							foreach ($row as $column) {
+								
+								$content_array[] = $column;
+								
+							}
+							
+						}
+						
+						
+						$content = implode(' ', $content_array);
+					
+						$this->settings['data'] = $content;
+
+					}
+				
+	
 				}
 
-				$this->settings['data'] = $wordList;
-	
 				break;
 
 			case 'id':
