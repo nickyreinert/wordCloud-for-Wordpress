@@ -84,6 +84,7 @@ function getWordCloudSettings(element) {
     processedSettings.enableOcr 	    = settings['enable-ocr'];
     processedSettings.ocrLanguage       = settings['ocr-language'];
     processedSettings.ocrLocalLibraries = settings['ocr-local-libraries'];    
+    processedSettings.maxImageSize      = parseInt(settings['max-image-size']);
     
     processedSettings.debug 	        = settings['debug'];
 
