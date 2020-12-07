@@ -240,6 +240,10 @@
 
 		var cleanText = settings.data.replace(new RegExp(settings.ignoreChars, 'gim'), '');
 
+		cleanText = (settings.textTransform == 'uppercase') 
+			? cleanText.toUpperCase()
+			: cleanText.toLowerCase();
+
 		var textArray = cleanText.split(' ');
 
 		settings.list = {};
@@ -249,16 +253,6 @@
 
 			// var word = word.replace(new RegExp('['+settings.ignoreChars+']'), '');
 			
-			if (settings.textTransform == 'uppercase') {
-
-				word = word.toUpperCase();
-
-			} else if (settings.textTransform == 'lowercase') {
-
-				word = word.toLowerCase();
-
-			}
-
 			if ((
 				typeof(settings.customBlackList[word]) === 'undefined' && 
 				!settings.blackList.includes(word)
