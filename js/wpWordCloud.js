@@ -248,36 +248,63 @@
 
 		settings.list = {};
 
-		// first count the words
-		$.each(textArray, function(index, word){
+		var purgedTextArray = [] 
 
-			// var word = word.replace(new RegExp('['+settings.ignoreChars+']'), '');
-			
+		// first remove stopp words
+		$.each(textArray, function(index, word) {
+				
 			if ((
-				typeof(settings.customBlackList[word]) === 'undefined' && 
+				typeof(settings.customBlackList[word]) === 'undefined' &&
 				!settings.blackList.includes(word)
 				) ||
 				!$("#word-cloud-activate-black-list-"+settings.id).is(":checked") 
  				
 			) {
 
-				if (word.length >= settings.minWordLength) {
+				purgedTextArray.push(word);
 
-					if (word in settings.list) {
-						
-						settings.list[word] = settings.list[word] + 1;
+			}
 
-					} else {
+		})
 
-						settings.list[word] = 1;
-	
-					}
+		var wordList = {};
+
+		var wordCount = Object.keys(purgedTextArray).length;
+
+		// second: count words
+		$.each(purgedTextArray, function(index, word) {
+
+			if (word.length >= settings.minWordLength) {
+
+				if (word in wordList) {
+					
+					wordList[word]['abs'] += 1
+					wordList[word]['rel'] = 100 * wordList[word]['abs']  / wordCount
+					wordList[word]['wdf'] = Math.log2(wordList[word]['abs'] + 1) / Math.log2(wordCount)
+
+				} else {
+
+					wordList[word] = {
+						'abs' : 1, 
+						'rel' : 100 / wordCount,
+						'wdf' : Math.log2(2) / Math.log2(wordCount)
+
+					};
 
 				}
 
 			}
 
+
 		});
+
+		// third: send values to result
+
+		$.each(wordList, function(index, word) {
+			
+			settings.list[index] = Math.round(word['abs']);
+
+		})
 
 		return prepareWordList(settings);
 
@@ -320,6 +347,7 @@
 
 		settings.weightFactor = function (size) {
 
+			return settings.sizeFactor;
 			return size * $('#word-cloud-'+settings.id).width() / (settings.sizeFactor * (settings.maxWeight / 15));
 			
 			// return Math.pow(size, 2.5) * $('#myWordCloud2').width() / 256;
