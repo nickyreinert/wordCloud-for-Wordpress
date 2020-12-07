@@ -36,8 +36,8 @@ function getWordCloudSettings(element) {
     processedSettings.maxRotation 		= parseFloat(settings['max-rotation']);
     processedSettings.rotateRatio 		= parseFloat(settings['rotate-ratio']);
     processedSettings.shape 			= settings['shape'];
-    processedSettings.drawOutOfBound 	= settings['draw-out-of-bound'];
-    processedSettings.shrinkToFit   	= settings['shrink-to-fit'];
+    processedSettings.drawOutOfBound 	= Boolean(settings['draw-out-of-bound']);
+    processedSettings.shrinkToFit   	= Boolean(settings['shrink-to-fit']);
     processedSettings.shuffle 			= settings['shuffle'];
     processedSettings.ellipticity 		= settings['ellipticity'];
     processedSettings.clearCanvas 		= settings['clear-canvas'];
