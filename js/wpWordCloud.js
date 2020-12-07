@@ -332,14 +332,10 @@
 		// pass function to color option, based on the weight of the word 
 		settings.color = function (word, weight, fontSize, radius, theta) {
 		
-			// have fun ;)
-			var alpha = 1 - Math.round(10 * 
-				(
-					(1 - settings.minAlpha) - (
-						(weight - settings.minWordOccurence) / 
-						(settings.maxWeight - settings.minWordOccurence))
-					
-				)) / 10;
+			var alpha = weight / settings.maxWeight
+			if (alpha < settings.minAlpha) {
+				alpha = settings.minAlpha;
+			}
 
 			return "rgba(0,0,0," + alpha + ")";
 
@@ -348,7 +344,7 @@
 		settings.weightFactor = function (size) {
 
 			return settings.sizeFactor;
-			return size * $('#word-cloud-'+settings.id).width() / (settings.sizeFactor * (settings.maxWeight / 15));
+			// return size * $('#word-cloud-'+settings.id).width() / (settings.sizeFactor * (settings.maxWeight / 15));
 			
 			// return Math.pow(size, 2.5) * $('#myWordCloud2').width() / 256;
 		
