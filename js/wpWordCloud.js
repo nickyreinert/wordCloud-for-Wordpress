@@ -343,7 +343,7 @@
 
 		settings.weightFactor = function (size) {
 
-			return settings.sizeFactor;
+			return settings.sizeFactor * size;
 			// return size * $('#word-cloud-'+settings.id).width() / (settings.sizeFactor * (settings.maxWeight / 15));
 			
 			// return Math.pow(size, 2.5) * $('#myWordCloud2').width() / 256;
