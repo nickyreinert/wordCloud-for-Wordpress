@@ -342,11 +342,22 @@
 		};
 
 		settings.weightFactor = function (size) {
-
-			return settings.sizeFactor * size;
-			// return size * $('#word-cloud-'+settings.id).width() / (settings.sizeFactor * (settings.maxWeight / 15));
 			
-			// return Math.pow(size, 2.5) * $('#myWordCloud2').width() / 256;
+			// if size factor is not set (=0), then use the canvas width
+
+			if (settings.sizeFactor == 0) {
+
+				return (
+						
+					($('#word-cloud-'+settings.id).width() * 0.1) * (size / (1 + size))
+					
+				)
+
+			} else {
+
+				return settings.sizeFactor * (size / (1 + size))
+
+			}
 		
 		};
 
