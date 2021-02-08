@@ -27,6 +27,8 @@ function getWordCloudSettings(element) {
 
     }
 
+    processedSettings.frontendSettings 	= Boolean(settings['frontend-settings']);
+
     processedSettings.backgroundColor 	= settings['background-color'];
     processedSettings.gridSize 			= settings['grid-size'];
     processedSettings.fontFamily 		= settings['font-family'];
@@ -94,6 +96,15 @@ function getWordCloudSettings(element) {
 
     }
 
+    if (processedSettings.frontendSettings == true) {
+
+        if (document.getElementById('word-cloud-setting-min-word-occurence-'+processedSettings.id)) {
+
+            processedSettings.minWordOccurence = document.getElementById('word-cloud-setting-min-word-occurence-'+processedSettings.id).value
+    
+        }
+    }
+    
     return processedSettings;
 
 }

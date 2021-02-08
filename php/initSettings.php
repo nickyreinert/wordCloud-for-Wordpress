@@ -16,7 +16,7 @@
 			'count-words'	    => ['default' => false,                 'valid' => 'bool',   'hidden' => false, 'description' => 'Enthält die Quelle Text und müssen die Wörter erst gezählt werden?'],
             'enable-frontend-edit' => ['default' => 0,                  'valid' => 'bool','hidden' => false, 'description' => 'Zeigt im Frontend ein Textfeld an, damit der Besucher die WordCloud selber bearbeiten kann.'],
 			'enable-ocr'        => ['default' => 0,                     'valid' => 'bool','hidden' => false, 'description' => 'Ermögliche das Hinzufügen von Texten direkt von der Kamera des Gerätes.'],
-			'style'	=> ['default' => 'canvas',                          'valid' => ['canvas', 'html'], 'hidden' => false, 'description' => 'Du kannst eine WordCloud als Canvas (also Bild) oder mit HTML-Tags erstellen.'],
+			'style'	            => ['default' => 'canvas',              'valid' => ['canvas', 'html'], 'hidden' => false, 'description' => 'Du kannst eine WordCloud als Canvas (also Bild) oder mit HTML-Tags erstellen.'],
 			'ocr-language'      => ['default' => 'deu',                 'hidden' => false, 'description' => 'Eine Liste unterstützter Sprachen und ihr Kürzel findest du hier: https://tesseract-ocr.github.io/tessdoc/Data-Files#data-files-for-version-400-november-29-2016. Du kannst mehrere Sprache mit Plus getrennt angeben (deu+eng).'],
 			'ocr-local-libraries' => ['default' => 0,                   'valid' => 'bool', 'hidden' => false, 'description' => 'Du kannst alle benötigten JavaScript-Dateien auch von deinem Server aus anbieten (siehe dazu die Doku).'],
 			'max-image-size'    => ['default' => '1024',                'hidden' => false, 'description' => 'Die maximale Höhe bzw. Breite des Bildes (je nachdem, was überschritten wird).'],
@@ -28,9 +28,9 @@
 			'persistent-custom-black-list'	=> ['default' => 1,         'valid' => 'bool','hidden' => false, 'description' => 'Bleibt die benutzerdefinierte Blacklist erhalten, wenn der Nutzer einen neuen Text hinzufügt?'],
 			'ignore-chars'		=> ['default' => '\(\)\[\]\,\.;',       'hidden' => false, 'description' => 'Regulärer Ausdruck um bestimmte Zeichen beim Zählen von Wörtern zu ignorieren.'],
 			'text-transform'	=> ['default' => 'uppercase',           'valid' => ['uppercase', 'lowercase', 'none'], 'hidden' => false, 'description' => 'Sollen alle Wörter groß- oder kleingeschrieben werden?'],
-			
             'min-alpha'			=> ['default' => 0.1,                   'hidden' => false, 'description' => 'Der Mindestwert für die Transparenz der Wörter. Setze den Wert auf 1 für gar keine Transparenz.'],
-            'size-factor'		=> ['default' => 100,                    'hidden' => false, 'description' => 'Mit diesem Wert kannst du die Größe der Wörter beeinflussen. Je kleiner der Wert, desto größer die Wörter in der WordCloud.'],
+            'size-factor'		=> ['default' => 100,                   'hidden' => false, 'description' => 'Mit diesem Wert kannst du die Größe der Wörter beeinflussen. Je kleiner der Wert, desto größer die Wörter in der WordCloud.'],
+            'frontend-settings'	=> ['default' => false,                 'valid' => 'bool', 'hidden' => false, 'description' => 'Erlaubt das Anpassen von einigen Parametern direkt im Frontend.'],
 
             'canvas-width'		=> ['default' => '1024px',              'hidden' => false, 'description' => 'Lege die Breite des Canvas fest.'],
 			'canvas-height'		=> ['default' => '800px',               'hidden' => false, 'description' => 'Lege die Höhe des Canvas fest.'],

@@ -31,6 +31,7 @@
 
 		// add canvas and / or html
 		$(this).append('<div class="word-cloud-controller"></div>');
+
 		if (wpWordCloudSettings.style == 'html') {
 
 			$(this).append('<div class="word-cloud" style="position: relative; height: '+wpWordCloudSettings.canvasHeight+'; width: '+wpWordCloudSettings.canvasWidth+';" id="word-cloud-html-'+wpWordCloudSettings.id+'"></div>');
@@ -60,6 +61,13 @@
 
 		}
 
+		// add container where user can edit settings from frontend
+		if (wpWordCloudSettings.frontendSettings == true) {
+
+			$(this).append('<label for="word-cloud-setting-min-word-occurence" class="word-cloud-setting-min-word-occurence-label">min-word-occurence:</label> <input type="text" value="' + wpWordCloudSettings.minWordOccurence + '" class="word-cloud-setting-min-word-occurence" id="word-cloud-setting-min-word-occurence-'+wpWordCloudSettings.id+'" name="word-cloud-setting-min-word-occurence-'+wpWordCloudSettings.id+'"></input>');
+
+		}		
+		
 		// add hover container
 		// hiden on init
 		$(this).append('<div class="word-cloud-tooltip" id="word-cloud-tooltip-'+wpWordCloudSettings.id+'"></div>');
