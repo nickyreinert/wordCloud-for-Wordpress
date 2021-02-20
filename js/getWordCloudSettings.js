@@ -101,6 +101,7 @@ function getWordCloudSettings(element) {
         if (document.getElementById('word-cloud-setting-min-word-occurence-'+processedSettings.id)) {
 
             processedSettings.minWordOccurence = document.getElementById('word-cloud-setting-min-word-occurence-'+processedSettings.id).value
+            processedSettings.sizeFactor = document.getElementById('word-cloud-setting-size-factor-'+processedSettings.id).value
     
         }
     }
