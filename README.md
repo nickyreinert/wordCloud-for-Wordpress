@@ -191,7 +191,7 @@ query="SELECT word, SUM(count) AS count FROM database.table GROUP BY word ORDER 
 
 # Common errors
 
-## Do not use line breaks
+## Do not use line breaks and double quotes
 You may tend to use line breaks within your short code to make it more readable, like this:
 
 	[wp-word-cloud
@@ -205,8 +205,9 @@ You may tend to use line breaks within your short code to make it more readable,
 	https://example.com/
 	[/wp-word-cloud]
 
-This will break not only the current short code but any other WordCloud implementation on the page.  
+If you also use double quotes, this will breaknot only the current short code but any other WordCloud implementation on the page.  
 This happens because WordPress decodes the content in a different way, when it contains line breaks. 
+More details here: https://wordpress.stackexchange.com/questions/90001/escaping-quotes-from-shortcode-attributes
 
 See a working demo - in German only - on https://www.nickyreinert.de/wordpress-plugin-um-eine-word-cloud-mit-beliebigen-woertern-darzustellen/
 
