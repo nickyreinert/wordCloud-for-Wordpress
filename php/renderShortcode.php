@@ -33,6 +33,8 @@ final class WPWordCloud {
 
 		$global_settings = [];
 
+		debug_wp_word_cloud(json_encode($individual_settings, JSON_PRETTY_PRINT), $individual_settings['debug']);
+
 		foreach (wp_word_cloud_get_global_settings() as $name => $value) {
 
 			// if global setting is a public one
@@ -77,6 +79,8 @@ final class WPWordCloud {
 		}
 
 		$this->settings['plugin-path'] = plugin_dir_url( __DIR__ );
+
+		debug_wp_word_cloud(json_encode($individual_settings, JSON_PRETTY_PRINT), $individual_settings['debug']);
 
 	}
 

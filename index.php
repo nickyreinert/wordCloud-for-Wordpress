@@ -40,18 +40,19 @@ if ( ! defined( 'WPINC' ) ) {
 *
 */
 
-function debug_wp_word_cloud($message = NULL, $priority = 1 ){
+function debug_wp_word_cloud($message = NULL, $debug = FALSE ){
 
 	// on settings page, debug level will be defined
 	// MAX_DEBUG_PRIORITY = 0 - no messages at all
 	// MAX_DEBUG_PRIORITY = 1 - errors & warnings only
 	// MAX_DEBUG_PRIORITY = 2 - every piece of information
 
-	if ($priority >= 1) {
+	if (($debug == TRUE OR $debug == 1 OR $debug == '1') AND is_admin() == FALSE) {
 
 		$message = json_encode($message, JSON_PRETTY_PRINT);
 
 		echo "<script>console.log('WORDCLOUD|DEBUG: ' + ".$message.");</script>";
-
+	
 	}
+
 }
