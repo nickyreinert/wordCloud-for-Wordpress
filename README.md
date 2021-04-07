@@ -189,4 +189,24 @@ If your source shall come from the SQL-database your wordpress installation is r
 
 query="SELECT word, SUM(count) AS count FROM database.table GROUP BY word ORDER BY count DESC LIMIT 0,50"
 
+# Common errors
+
+## Do not use line breaks
+You may tend to use line breaks within your short code to make it more readable, like this:
+
+	[wp-word-cloud
+	rotate-ratio=1 
+	max-rotation=1.6 
+	min-rotation=1.6 
+	source-type="url" 
+	shape="circle" 
+	debug=1 
+	id="demo2"]
+	https://example.com/
+	[/wp-word-cloud]
+
+This will break not only the current short code but any other WordCloud implementation on the page.  
+This happens because WordPress decodes the content in a different way, when it contains line breaks. 
+
 See a working demo - in German only - on https://www.nickyreinert.de/wordpress-plugin-um-eine-word-cloud-mit-beliebigen-woertern-darzustellen/
+
