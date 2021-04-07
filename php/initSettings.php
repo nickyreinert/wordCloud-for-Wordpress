@@ -36,6 +36,7 @@
 			'canvas-height'		=> ['default' => '800px',               'hidden' => false, 'description' => 'Lege die Höhe des Canvas fest.'],
 
             'background-color'	=> ['default' => 'rgba(255,255,255,0)', 'hidden' => false, 'description' => 'Der Hintergrund des Canvas. Nutze entweder die rgba() oder Hex-Angabe.'],
+            'color'	            => ['default' => 'black',               'hidden' => false, 'description' => 'Farbe der Wörter als CSS. Alternativ random-dark oder random-light für zufällige Farben.'],
             'grid-size'			=> ['default' => 1,                     'hidden' => false, 'description' => 'Hiermit kannst du die Abstände zwischen den Wörtern erhöhen.'],
 			'font-family'		=> ['default' => 'Arial, sans-serif',   'hidden' => false, 'description' => 'Die CSS-Angabe für die verwendete Schriftart.'],
 			'min-size'			=> ['default' => 1,                     'hidden' => false, 'description' => 'Wie groß muss ein Wort sein, um in der WordCloud angezeigt zu werden?'],
