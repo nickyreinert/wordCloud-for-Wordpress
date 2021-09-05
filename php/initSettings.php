@@ -103,25 +103,31 @@
                             echo '</td><td>';
 
                             // add select input if it's a limited option
-                            if (is_array($value['valid'])) {
 
-                                echo '<select name="'.$name.'" size=1>';
-                                foreach ($value['valid'] as $key => $option) {
+                            if (isset($value['valid'])) {
                                     
-                                    echo '<option value="'.$option.'" '.selected(get_option($name), $option).'>'.$option.'</option>';
+                                if (is_array($value['valid'])) {
+
+                                    echo '<select name="'.$name.'" size=1>';
+                                    foreach ($value['valid'] as $key => $option) {
+                                        
+                                        echo '<option value="'.$option.'" '.selected(get_option($name), $option).'>'.$option.'</option>';
+
+                                    }
+                                    echo '</select>';
+
+                                } else if ($value['valid'] == 'text') {
+
+                                    echo '<textarea id="'.$name.'" name="'.$name.'">'.get_option($name).'</textarea>';
+
+                                // add checkbox if it is a true/false option
+                                } else if ($value['valid'] == 'bool') {
+
+                                    echo '<input type="checkbox" id="'.$name.'" value=1 name="'.$name.'" '.checked(1, get_option($name), false).'>';
 
                                 }
-                                echo '</select>';
 
-                            } else if ($value['valid'] == 'text') {
-
-                                echo '<textarea id="'.$name.'" name="'.$name.'">'.get_option($name).'</textarea>';
-
-                            // add checkbox if it is a true/false option
-                            } else if ($value['valid'] == 'bool') {
-
-                                echo '<input type="checkbox" id="'.$name.'" value=1 name="'.$name.'" '.checked(1, get_option($name), false).'>';
-
+                            // if no valid-option is given, just handle this as a text option
                             } else {
 
                                 echo '<input type="text" id="'.$name.'" name="'.$name.'" value="'.esc_attr(get_option($name)).'"';
