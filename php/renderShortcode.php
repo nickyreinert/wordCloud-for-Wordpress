@@ -78,7 +78,7 @@ final class WPWordCloud {
 
 		$this->settings['plugin-path'] = plugin_dir_url( __DIR__ );
 
-		debug_wp_word_cloud(json_encode($individual_settings, JSON_PRETTY_PRINT), $individual_settings['debug']);
+		debug_wp_word_cloud(json_encode($individual_settings, JSON_PRETTY_PRINT), $individual_settings);
 
 	}
 
